@@ -1,7 +1,8 @@
-import { Container, styled } from "@mui/material";
+import ProductOfferingList from "./ProductOfferingList";
+import { styled, Container } from "@mui/material";
 
 const StyledSection = styled("section")(({ theme }) => ({
-  marginTop: "8.06rem",
+  marginBottom: "8.44rem",
 }));
 
 const StyledMainHeading = styled("h2")(({ theme }) => ({
@@ -11,18 +12,19 @@ const StyledMainHeading = styled("h2")(({ theme }) => ({
   fontStyle: "normal",
   fontWeight: 700,
   lineHeight: "normal",
-  marginBottom: "3rem",
+  marginBottom: "3.4rem",
   textAlign: "center",
 }));
 
-const FeaturedProducts = () => {
+const ProductOffering = () => {
   return (
     <StyledSection>
       <Container>
-        <StyledMainHeading>Featured Products</StyledMainHeading>
+        <StyledMainHeading>What Shopex Offer!</StyledMainHeading>
+        <ProductOfferingList />
       </Container>
     </StyledSection>
   );
 };
 
-export default FeaturedProducts;
+export default ProductOffering;

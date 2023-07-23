@@ -9,6 +9,7 @@ const StyledSiteLink = styled(Link)(({ theme }) => ({
   fontstyle: "normal",
   fontWeight: 700,
   lineHeight: "normal",
+  textDecoration: "none",
 }));
 
 const StyledPagesLink = styled(Link)(({ theme }) => ({
@@ -18,6 +19,7 @@ const StyledPagesLink = styled(Link)(({ theme }) => ({
   fontstyle: "normal",
   fontWeight: 400,
   lineHeight: "normal",
+  textDecoration: "none",
 }));
 
 const SubHeader = () => {

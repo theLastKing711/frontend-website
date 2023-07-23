@@ -115,7 +115,6 @@ const Hero = () => {
             padding: "6rem 0 2.25rem 0rem",
           }}
         >
-          +
           <Box sx={{ flex: 1, padding: "2rem 0" }}>
             <StyledTopText>Best Furniture For Your Castle...</StyledTopText>
             <StyledMainHeading>

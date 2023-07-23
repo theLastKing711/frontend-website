@@ -38,13 +38,13 @@ const MainHeader = () => {
           <Box component="nav">
             <Box component="ul" display="flex" alignItems="center">
               <Box component="li">
-                <StyledMainHeaderItem display="flex" mr={1.5}>
+                <StyledMainHeaderItem display="flex" mr={3} gap="0.3rem">
                   <Box>Login</Box>
                   <PersonIcon />
                 </StyledMainHeaderItem>
               </Box>
               <Box component="li">
-                <StyledMainHeaderItem display="flex" mr={4}>
+                <StyledMainHeaderItem display="flex" mr={3} gap="0.3rem">
                   <Box>Wishlist</Box>
                   <FavoriteBorderIcon />
                 </StyledMainHeaderItem>
