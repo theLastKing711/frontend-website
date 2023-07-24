@@ -12,12 +12,14 @@ import {
 } from "react-router-dom";
 import Home from "./pages/home/Home.tsx";
 import ShopProducts from "./pages/shop-products/ShopProducts.tsx";
+import ProductDetails from "./pages/product-details/ProductDetails.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index element={<Home />} />
       <Route path="shop-products" element={<ShopProducts />} />
+      <Route path="product/:id" element={<ProductDetails />} />
     </Route>
   )
 );

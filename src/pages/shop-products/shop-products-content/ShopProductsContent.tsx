@@ -1,7 +1,12 @@
 import React from "react";
+import { StyledMain } from "./ShopProductsContent.styles";
 
-const ShopProductsContent = () => {
-  return <div>ShopProductsContent</div>;
+interface Props {
+  children: JSX.Element;
+}
+
+const ShopProductsContent = ({ children }: Props) => {
+  return <StyledMain>{children}</StyledMain>;
 };
 
 export default ShopProductsContent;
