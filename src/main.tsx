@@ -13,6 +13,7 @@ import {
 import Home from "./pages/home/Home.tsx";
 import ShopProducts from "./pages/shop-products/ShopProducts.tsx";
 import ProductDetails from "./pages/product-details/ProductDetails.tsx";
+import { ShoppingCart } from "@mui/icons-material";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="shop-products" element={<ShopProducts />} />
       <Route path="product/:id" element={<ProductDetails />} />
+      <Route path="shopping-cart" element={<ShoppingCart />} />
     </Route>
   )
 );
