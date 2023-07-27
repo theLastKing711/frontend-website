@@ -13,7 +13,8 @@ import {
 import Home from "./pages/home/Home.tsx";
 import ShopProducts from "./pages/shop-products/ShopProducts.tsx";
 import ProductDetails from "./pages/product-details/ProductDetails.tsx";
-import { ShoppingCart } from "@mui/icons-material";
+import ShoppingCart from "./pages/shopping-cart/ShoppingCart.tsx";
+import OrderCompleted from "./pages/order-completed/OrderCompleted.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
       <Route path="shop-products" element={<ShopProducts />} />
       <Route path="product/:id" element={<ProductDetails />} />
       <Route path="shopping-cart" element={<ShoppingCart />} />
+      <Route path="order-completed" element={<OrderCompleted />} />
     </Route>
   )
 );
