@@ -1,7 +1,7 @@
 import { ButtonBase, styled } from "@mui/material";
 
 export const StyledMain = styled('main')( ({ theme }) => ({
-    padding: "11.31rem 0 5.25rem",
+    padding: "11.31rem 0 8.25rem",
     position: "relative",
 }));
 

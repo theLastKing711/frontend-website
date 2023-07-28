@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@mui/material";
 import {
   OrderContainer,
   StyledMain,
@@ -9,9 +10,11 @@ import CompletedCheckImage from "./completed-check-image/CompletedCheckImage";
 import TaskTimeDrawing from "./task-time-drawing/TaskTimeDrawing";
 
 const OrderCompleted = () => {
+  const isDrawingVisibile = useMediaQuery("(min-width:850px)");
+
   return (
     <StyledMain>
-      <TaskTimeDrawing />
+      {isDrawingVisibile && <TaskTimeDrawing />}
       <OrderContainer>
         <CompletedCheckImage />
         <StyledSubHeading>Your Order Is Completed!</StyledSubHeading>

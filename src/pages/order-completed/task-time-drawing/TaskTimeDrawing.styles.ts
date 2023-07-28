@@ -4,9 +4,6 @@ export const StyledContainer = styled('div')( ({ theme }) => ({
     position: "absolute",
     maxWidth: 1169.92,
     padding: "0 1rem",
-    // padding: '13.69rem 0 5.25rem',
-    // transform: "translateX(-50%)",
-    // left: "50%",
     left:0,
     right: 0,
     margin: "0 auto",
@@ -14,7 +11,7 @@ export const StyledContainer = styled('div')( ({ theme }) => ({
 
 export const StyledContentContainer = styled('div')( ({ theme }) => ({
    position: "relative",
-   height: "24.8725rem",
+   height: "26.8725rem",
    display: "flex",
 }));
 
@@ -31,15 +28,14 @@ export const StyledClockImage = styled('img')( ({ theme }) => ({
 }));
 
 export const StyledClockVerticalLine = styled('div')( ({ theme }) => ({
-    background: "#D2D1D1",
-    width: '0.0625rem',
+    border: '0.0625rem dashed #D2D1D1',
     height: '100%',
 }));
 
 export const StyledListImageContainer = styled('div')( ({ theme }) => ({
     flex: 1,
     display: "flex",
-    alignItems: "flex-end"
+    alignItems: "flex-end",
 }));
 
 export const StyledListImageRowContainer = styled('div')( ({ theme }) => ({
@@ -50,10 +46,9 @@ export const StyledListImageRowContainer = styled('div')( ({ theme }) => ({
 
 
 export const StyledListImageHorizantalLine = styled('div')( ({ theme }) => ({
-    background: "#D2D1D1",
-    height: '0.0625rem',
-    width: '100%',
-    marginLeft: "-2.95rem",
+    width: "100%",
+    marginLeft: "-2.65rem",
+    border: "0.0625rem dashed #D2D1D1",
 }));
 
 export const StyledListImage = styled('img')( ({ theme }) => ({
