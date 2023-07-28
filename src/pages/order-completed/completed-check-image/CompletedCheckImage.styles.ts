@@ -1,9 +1,9 @@
 import { styled } from "@mui/material";
-import CheckedCircleImage from "../../../assets/checked-circle.png";
-import CheckedCorrectSignImage from "../../../assets/checked-correct-sign.png";
+
 import CheckedOuterImage from "../../../assets/checked-outer.png";
 
-export const MainImagesContainer = styled("div")({
+
+export const StyledCheckedOuterBackground = styled("div")({
     position: "relative",
     width: "5.43875rem",
     height: "5.02738rem",
@@ -11,38 +11,19 @@ export const MainImagesContainer = styled("div")({
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     backgroundPosition: "center",
-  });
+    marginBottom: "1.41rem",
 
-export const StyledCheckedOuterBackground = styled("div")({
-  position: "relative",
-  width: "5.43875rem",
-  height: "5.02738rem",
-  backgroundImage: `url(${CheckedOuterImage})`,
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center"
 });
 
-export const StyledCheckedCircleBackground = styled("div")({
+export const StyledCheckedCircleImg = styled("img")({
     position: "absolute",
-    backgroundImage: `url(${CheckedCircleImage})`,
-    backgroundRepeat: "no-repeat",
-    width: "4.0625rem",
-    height: "4.0625rem",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
+    top: "0.38rem",
+    left: "0.69rem"
   });
 
-export const StyledCheckedCorrectSignBackground = styled("div")({
-  position: "absolute",
-  backgroundImage: `url(${CheckedCorrectSignImage})`,
-  backgroundRepeat: "no-repeat",
-  width: "2.88025rem",
-  height: "2.30706rem"
-
+export const StyledCheckedCorrectSignImg = styled("img")({
+    position: "absolute",
+    top: "1.25rem",
+    left: "1.31rem"
 });
 

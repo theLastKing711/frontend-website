@@ -6,10 +6,12 @@ import {
   StyledText,
 } from "./OrderCompleted.styles";
 import CompletedCheckImage from "./completed-check-image/CompletedCheckImage";
+import TaskTimeDrawing from "./task-time-drawing/TaskTimeDrawing";
 
 const OrderCompleted = () => {
   return (
     <StyledMain>
+      <TaskTimeDrawing />
       <OrderContainer>
         <CompletedCheckImage />
         <StyledSubHeading>Your Order Is Completed!</StyledSubHeading>

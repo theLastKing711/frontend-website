@@ -1,18 +1,17 @@
 import {
-  StyledCheckedCircleBackground,
-  StyledCheckedCorrectSignBackground,
+  StyledCheckedCircleImg,
+  StyledCheckedCorrectSignImg,
   StyledCheckedOuterBackground,
 } from "./CompletedCheckImage.styles";
+import CheckedCorrectSignImage from "../../../assets/checked-correct-sign.png";
+import CheckedCircleImage from "../../../assets/checked-circle.png";
 
 const CompletedCheckImage = () => {
   return (
-    <div>
-      <StyledCheckedOuterBackground>
-        <StyledCheckedCircleBackground>
-          <StyledCheckedCorrectSignBackground />
-        </StyledCheckedCircleBackground>
-      </StyledCheckedOuterBackground>
-    </div>
+    <StyledCheckedOuterBackground>
+      <StyledCheckedCircleImg src={CheckedCircleImage} />
+      <StyledCheckedCorrectSignImg src={CheckedCorrectSignImage} />
+    </StyledCheckedOuterBackground>
   );
 };
 

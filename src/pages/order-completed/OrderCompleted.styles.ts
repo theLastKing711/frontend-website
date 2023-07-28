@@ -2,10 +2,12 @@ import { ButtonBase, styled } from "@mui/material";
 
 export const StyledMain = styled('main')( ({ theme }) => ({
     padding: "11.31rem 0 5.25rem",
+    position: "relative",
 }));
 
 export const OrderContainer = styled('div')( ({ theme }) => ({
-    maxWidth: "40rem",
+    maxWidth: "42rem",
+    padding: "0 1rem",
     margin: "0 auto",
     display: "flex",
     flexDirection: "column",
