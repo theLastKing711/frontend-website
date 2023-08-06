@@ -1,4 +1,8 @@
 import {
+  useGetFiltersQuery,
+  useGetShopProductsQuery,
+} from "../../../redux/services/shop-products/shopProductApi";
+import {
   StyledAside,
   StyledBrandCheckBox,
   StyledFilterSection,
@@ -36,9 +40,13 @@ const priceFilterRanges = [
 ];
 
 const ShopProductsSideBar = () => {
+  const { data, isLoading } = useGetFiltersQuery();
+
+  console.log("data", data);
+
   return (
     <StyledAside>
-      <StyledFilterSection>
+      {/* <StyledFilterSection>
         <StyledHeading>Product Brand</StyledHeading>
         <StyledList>
           <StyledListItem>
@@ -64,7 +72,7 @@ const ShopProductsSideBar = () => {
             <StyledLabel htmlFor="brand">Fusion Dot High Fashion</StyledLabel>
           </StyledListItem>
         </StyledList>
-      </StyledFilterSection>
+      </StyledFilterSection> */}
       <StyledFilterSection>
         <StyledHeading>Rating Item</StyledHeading>
         <StyledList>
