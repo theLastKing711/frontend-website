@@ -15,6 +15,10 @@ import ShopProducts from "./pages/shop-products/ShopProducts.tsx";
 import ProductDetails from "./pages/product-details/ProductDetails.tsx";
 import ShoppingCart from "./pages/shopping-cart/ShoppingCart.tsx";
 import OrderCompleted from "./pages/order-completed/OrderCompleted.tsx";
+import Login from "./pages/auth/login/Login.tsx";
+import SignUp from "./pages/auth/sign-up/SignUp.tsx";
+import { Provider } from "react-redux";
+import { store } from "./redux/store.ts";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,14 +28,18 @@ const router = createBrowserRouter(
       <Route path="product/:id" element={<ProductDetails />} />
       <Route path="shopping-cart" element={<ShoppingCart />} />
       <Route path="order-completed" element={<OrderCompleted />} />
+      <Route path="login" element={<Login />} />
+      <Route path="sign-up" element={<SignUp />} />
     </Route>
   )
 );
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider theme={customTheme}>
-      <RouterProvider router={router}></RouterProvider>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={customTheme}>
+        <RouterProvider router={router}></RouterProvider>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>
 );

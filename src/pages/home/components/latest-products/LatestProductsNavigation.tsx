@@ -1,4 +1,5 @@
-import { styled } from "@mui/material";
+import { Tab, Tabs, styled } from "@mui/material";
+import { useState } from "react";
 
 const listItems = ["New Arrival", "Best Seller", "Featured", "Special Offer"];
 
@@ -44,14 +45,35 @@ const StyledListItem = styled("li")(({ theme }) => ({
   },
 }));
 
-const LatestProductsNavigation = () => {
+const StyledTabs = styled(Tabs)(({ theme }) => ({
+  "& .MuiTabs-flexContainer": {
+    display: "flex",
+    justifyContent: "center",
+    gap: "3.63rem",
+    overflow: "auto",
+  },
+}));
+
+interface Props {
+  handleTabChange: (value: number) => void;
+  activeTabIndex: number;
+}
+
+const LatestProductsNavigation = ({
+  handleTabChange,
+  activeTabIndex,
+}: Props) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    handleTabChange(newValue);
+  };
+
   return (
     <StyledNav>
-      <StyledList>
+      <StyledTabs onChange={handleChange} value={activeTabIndex}>
         {listItems.map((item) => (
-          <StyledListItem key="item">{item}</StyledListItem>
+          <Tab key={item} label={item} />
         ))}
-      </StyledList>
+      </StyledTabs>
     </StyledNav>
   );
 };

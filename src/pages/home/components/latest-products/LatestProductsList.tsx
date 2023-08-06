@@ -1,6 +1,10 @@
 import { Grid } from "@mui/material";
 import { LatestProduct } from "../../home.type";
 import LatestProductsItem from "./LatestProductsItem";
+import { LatestProductItemDto } from "src/redux/services/home/homeApi";
+import { useCartItems } from "../../../../redux/features/saved-cart-items/hooks/useCartItems";
+import { useDispatch } from "react-redux";
+import { toggleItem } from "../../../../redux/features/saved-cart-items/savedCartItems";
 
 const productList: LatestProduct[] = [
   {
@@ -36,15 +40,25 @@ const productList: LatestProduct[] = [
 ];
 
 interface Props {
-  productsList: LatestProduct;
+  products: LatestProductItemDto[];
 }
 
-const LatestProductsList = () => {
+const LatestProductsList = ({ products }: Props) => {
+  const dispatch = useDispatch();
+
+  const { isItemInCart } = useCartItems();
+
   return (
     <Grid container spacing={4}>
-      {productList.map((product) => (
+      {products.map((product) => (
         <Grid item xs={12} md={6} lg={4} key={product.id}>
-          <LatestProductsItem product={product} />
+          <LatestProductsItem
+            product={product}
+            isAddedToCart={isItemInCart(product.id)}
+            handleItemAddedToCart={(item) => {
+              dispatch(toggleItem(item));
+            }}
+          />
         </Grid>
       ))}
     </Grid>

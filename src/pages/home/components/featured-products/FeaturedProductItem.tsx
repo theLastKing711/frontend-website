@@ -1,19 +1,17 @@
-import { Box, IconButton, Link, Paper, styled } from "@mui/material";
+import {
+  IconButton,
+  IconButtonProps,
+  Link,
+  Paper,
+  styled,
+} from "@mui/material";
 import { useState } from "react";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 import FirstProductImage from "../../../../assets/first-featured-product.png";
-import SecondProductImage from "../../../../assets/second-featured-product.png";
-import ThirdProductImage from "../../../../assets/third-featured-product.png";
-import FourthProductImage from "../../../../assets/fourth-featured-product.png";
-import { FeaturedProduct } from "../../home.type";
-
-interface Props {
-  product: FeaturedProduct;
-}
+import { FeaturedProductItemDto } from "src/redux/services/home/homeApi";
 
 const StyledProductDetailsLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
@@ -48,9 +46,13 @@ const StyledActionBar = styled(motion.ul)(({ theme }) => ({
   gap: "1rem",
 }));
 
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  fill: "light blue",
+const StyledIconButton = styled(IconButton)<
+  IconButtonProps & { isItemActive: boolean }
+>(({ theme, isItemActive }) => ({
   transition: "fill 0.2s",
+  "& svg": {
+    fill: `${isItemActive ? "#2F1AC4" : "light blue"} `,
+  },
   "&:hover svg": {
     fill: "#2F1AC4",
   },
@@ -120,7 +122,21 @@ const item: Variants | undefined = {
   hidden: { scale: 0 },
 };
 
-const FeaturedProductItem = ({ product }: Props) => {
+interface Props {
+  product: FeaturedProductItemDto;
+  isItemAddedToCart?: boolean;
+  isItemFavourited?: boolean;
+  handleAddToCartClicked: (item: FeaturedProductItemDto) => void;
+  handleFavoriteClicked: (item: FeaturedProductItemDto) => void;
+}
+
+const FeaturedProductItem = ({
+  product,
+  isItemAddedToCart = false,
+  isItemFavourited = false,
+  handleAddToCartClicked,
+  handleFavoriteClicked,
+}: Props) => {
   const [isActionBarActive, setIsActionBarActive] = useState(false);
 
   const showActionBar = () => {
@@ -148,12 +164,18 @@ const FeaturedProductItem = ({ product }: Props) => {
                 variants={list}
               >
                 <motion.li variants={item}>
-                  <StyledIconButton>
+                  <StyledIconButton
+                    isItemActive={isItemAddedToCart}
+                    onClick={() => handleAddToCartClicked(product)}
+                  >
                     <StyledShoppingCartIcon />
                   </StyledIconButton>
                 </motion.li>
                 <motion.li variants={item}>
-                  <StyledIconButton>
+                  <StyledIconButton
+                    isItemActive={isItemFavourited}
+                    onClick={() => handleFavoriteClicked(product)}
+                  >
                     <StyledFavoriteBorderIcon />
                   </StyledIconButton>
                 </motion.li>
@@ -165,8 +187,8 @@ const FeaturedProductItem = ({ product }: Props) => {
           </StyledImageContainer>
         </StyledCardHeader>
         <StyledCardBody className="card-body">
-          <StyledProductTitle>Cantilever chair</StyledProductTitle>
-          <StyeldProductPrice>$42.00</StyeldProductPrice>
+          <StyledProductTitle>{product.name}</StyledProductTitle>
+          <StyeldProductPrice>${product.price}</StyeldProductPrice>
         </StyledCardBody>
       </StyledPaper>
     </StyledProductDetailsLink>

@@ -1,12 +1,10 @@
-import { Box, IconButton, Link, Paper, styled } from "@mui/material";
+import { IconButton, IconButtonProps, Link, styled } from "@mui/material";
 import { useState } from "react";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-import FirstProductImage from "../../../../assets/first-latest-product.png";
-import { FeaturedProduct } from "../../home.type";
+import { LatestProductItemDto } from "src/redux/services/home/homeApi";
 
 const StyledProductDetailsLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
@@ -22,8 +20,8 @@ const StyledCardHeader = styled("div")(({ theme }) => ({
 }));
 
 const StyledImageContainer = styled("div")(({ theme }) => ({
-  position: "relative",
   height: "16.75rem",
+  padding: "1.5rem 2.8rem",
 }));
 
 const StyledActionBar = styled(motion.ul)(({ theme }) => ({
@@ -35,8 +33,12 @@ const StyledActionBar = styled(motion.ul)(({ theme }) => ({
   gap: "1rem",
 }));
 
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  fill: "light blue",
+const StyledIconButton = styled(IconButton)<
+  IconButtonProps & { isAddedToCart: boolean }
+>(({ theme, isAddedToCart }) => ({
+  "& svg": {
+    fill: `${isAddedToCart ? "#2F1AC4" : "light blue"} `,
+  },
   transition: "fill 0.2s",
   "&:hover svg": {
     fill: "#2F1AC4",
@@ -136,10 +138,16 @@ const item: Variants | undefined = {
 };
 
 interface Props {
-  product: FeaturedProduct;
+  product: LatestProductItemDto;
+  isAddedToCart?: boolean;
+  handleItemAddedToCart: (product: LatestProductItemDto) => void;
 }
 
-const LatestProductsItem = ({ product }: Props) => {
+const LatestProductsItem = ({
+  product,
+  isAddedToCart = false,
+  handleItemAddedToCart,
+}: Props) => {
   const [isActionBarActive, setIsActionBarActive] = useState(false);
 
   const showActionBar = () => {
@@ -150,7 +158,6 @@ const LatestProductsItem = ({ product }: Props) => {
     setIsActionBarActive(false);
   };
 
-  console.log("product", product);
   return (
     <StyledProductDetailsLink
       onMouseEnter={showActionBar}
@@ -166,12 +173,15 @@ const LatestProductsItem = ({ product }: Props) => {
               variants={list}
             >
               <motion.li variants={item}>
-                <StyledIconButton>
+                <StyledIconButton
+                  isAddedToCart={isAddedToCart}
+                  onClick={() => handleItemAddedToCart(product)}
+                >
                   <StyledShoppingCartIcon />
                 </StyledIconButton>
               </motion.li>
               <motion.li variants={item}>
-                <StyledIconButton>
+                <StyledIconButton isAddedToCart={isAddedToCart}>
                   <StyledFavoriteBorderIcon />
                 </StyledIconButton>
               </motion.li>
@@ -179,14 +189,18 @@ const LatestProductsItem = ({ product }: Props) => {
           )}
         </AnimatePresence>
         <StyledImageContainer>
-          <StyledProductImage src={FirstProductImage} />
+          <StyledProductImage src={product.imagePath} />
         </StyledImageContainer>
       </StyledCardHeader>
       <StyledCardBody className="card-body">
-        <StyledProductTitle>Cantilever chair</StyledProductTitle>
+        <StyledProductTitle>{product.name}</StyledProductTitle>
         <StyeldProductPricing>
-          <StyledProductPrice>$42.00</StyledProductPrice>
-          <StyledDiscountedProductPrice>$65.00</StyledDiscountedProductPrice>
+          <StyledProductPrice>{product.price}$</StyledProductPrice>
+          {product.discount && (
+            <StyledDiscountedProductPrice>
+              {product.discount?.value}$
+            </StyledDiscountedProductPrice>
+          )}
         </StyeldProductPricing>
       </StyledCardBody>
     </StyledProductDetailsLink>

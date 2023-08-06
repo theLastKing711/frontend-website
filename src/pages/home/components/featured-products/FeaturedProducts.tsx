@@ -56,7 +56,7 @@ const FeaturedProducts = () => {
     <StyledSection>
       <Container>
         <StyledMainHeading>Featured Products</StyledMainHeading>
-        <FeaturedProductsList productList={productList} />
+        {/* <FeaturedProductsList productList={productList} /> */}
       </Container>
     </StyledSection>
   );

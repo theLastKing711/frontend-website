@@ -5,8 +5,14 @@ import LatestProducts from "./components/latest-products/LatestProducts";
 import ProductOffering from "./components/product-offering/ProductOffering";
 import UniqueFeatures from "./components/unique-features/UniqueFeatures";
 import NewsLetter from "./components/news-letter/NewsLetter";
+import { useSelector } from "react-redux";
+import { RootState } from "src/redux/store";
 
 const Home = () => {
+  const rootState = useSelector((state: RootState) => state.savedCartItems);
+
+  console.log("rootState", rootState);
+
   return (
     <Box component="main">
       <Hero />
