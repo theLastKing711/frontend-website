@@ -1,50 +1,88 @@
 import { useSearchParams } from "react-router-dom"
 
-const useFilterProducts = () => {
+export const useFilterProducts = () => {
 
     const [searchParams, setSerchParams] = useSearchParams();
 
-    const perPageFilter = searchParams.get('perPage');
+    const perPageFilter = searchParams.get('perPage') || "";
 
-    const ratingFilter = searchParams.get('rating');
+    const sortFilter = searchParams.get('sort') || "";
 
-    const pricesFilter =searchParams.get('prices');
+    const ratingFilter = searchParams.get('rating') || "";
 
-    const searchFilter = searchParams.get('searchFilter');
+    const pricesFilter = searchParams.get('prices') || "";
+
+    const searchFilter = searchParams.get('search') || "";
+
+    const categoriesFilter = searchParams.getAll('categoryIds');
+
+    console.log("categoriesFilter", categoriesFilter);
 
     const toggleCategoryFilterItem = (categoryId: string) => {
-
+        
         setSerchParams(prev => {
 
-            const categoriesFilter = prev.get('categoryIds')
+            const categoriesFilter = prev.getAll('categoryIds') || [];
+
+            console.log('categoriesFilter', categoriesFilter);
             
             if ( !categoriesFilter ) {
+
                 prev.set('categoryIds', categoryId);
             }
             else {
-                prev.append('categoryIds', categoryId)
+                
+                
+                const isItemAlreadyInList = categoriesFilter.find(id => categoryId === id);
+                
+                if(isItemAlreadyInList) {
+                    const oldEntries = categoriesFilter.filter(x => x !==categoryId);
+                    prev.delete('categoryIds')
+                    oldEntries.forEach((item) => {
+                        prev.append('categoryIds', item);
+                    })
+                }
+                else {
+                    prev.append('categoryIds', categoryId);
+                }
             }
 
-            return {...prev}
+            return prev;
             
-        })
+        });
         
     }
 
-    const togglePerPageFilterItem = (perPage: number) => {
+    const togglePerPageFilterItem = (perPage: string) => {
 
         setSerchParams(prev => {
-
-            const perPageFilter = prev.get('perPage')
             
-            if ( !perPageFilter ) {
-                prev.set('perPage', perPage.toString());
+            if ( perPage ) {
+                prev.set('perPage', perPage);
+            }
+            else
+            {
+                prev.delete('perPage');
+            }
+            
+            return prev;
+            
+        });
+        
+    }
+
+    const toggleSortFilterItem = (sort: string) => {
+
+        setSerchParams(prev => {
+            
+            if ( !sort ) {
+                prev.delete('sort')
             }
             else {
-                prev.delete('perPage')
+                prev.set('sort', sort);
             }
-
-            return {...prev}
+            
+            return prev
             
         })
         
@@ -56,71 +94,69 @@ const useFilterProducts = () => {
 
             const ratingFilter = prev.get('rating')
             
-            if ( !ratingFilter ) {
+            if ( !ratingFilter || (ratingFilter &&  starsNumber !== ratingFilter)) {
                 prev.set('rating', starsNumber);
             }
             else {
                 prev.delete('rating')
             }
-
-            return {...prev}
+            
+            return prev
             
         })
         
     }
 
-    const togglePriceFilterItem = (prices: number[]) => {
+    const togglePriceFilterItem = (prices: string) => {
 
         setSerchParams(prev => {
 
             const pricesFilter = prev.get('prices')
             
-            if ( !pricesFilter ) {
-
-                const pricesRangeString = `${prices[0]}-${prices[1]}`;
-                
-                prev.set('prices', pricesRangeString);
+            if ( !pricesFilter || (pricesFilter &&  prices !== pricesFilter)) {
+                prev.set('prices', prices);
             }
             else {
                 prev.delete('prices')
             }
-
-            return {...prev}
             
-        })
+            return prev
+            
+        });
         
     }
 
     const toggleSearchFilterItem = (search: string) => {
 
         setSerchParams(prev => {
-
-            const searchFilter = prev.get('search')
             
-            if(searchFilter === '') {
-                prev.delete('search')
-            }
-            else
-            if ( !searchFilter ) {
-                
+            if ( search ) {
                 prev.set('search', search);
             }
-            else {
-                prev.delete('search')
+            else
+            {
+                prev.delete('search');
             }
-
-            return {...prev}
             
-        })
+            return prev;
+            
+        });
         
     }
     
     return {
+        perPageFilter,
+        sortFilter,
+        pricesFilter,
+        categoriesFilter,
+        ratingFilter,
+        searchFilter,
         toggleCategoryFilterItem,
+        toggleSortFilterItem,
         togglePerPageFilterItem,
         togglePriceFilterItem,
         toggleRatingFilterItem,
-        toggleSearchFilterItem
+        toggleSearchFilterItem,
     }
 
 }

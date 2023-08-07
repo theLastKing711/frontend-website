@@ -2,6 +2,7 @@ import {
   useGetFiltersQuery,
   useGetShopProductsQuery,
 } from "../../../redux/services/shop-products/shopProductApi";
+import { useFilterProducts } from "../hooks/useFilterProducts";
 import {
   StyledAside,
   StyledBrandCheckBox,
@@ -19,7 +20,7 @@ import UilUnCheckedBox from "./component/form/UilUnCheckedBox";
 import PriceFilterInput from "./component/form/price-filter-input/PriceFilterInput";
 
 // const starsFilter = Array.from({length: 5}, (_, i) => )
-
+// const reg = /^\$\d+(\.\d+)?((\s-\s*\$\d+(\.\d+)?))|(\s*\+)$/
 const priceFilterRanges = [
   {
     id: 1,
@@ -39,8 +40,22 @@ const priceFilterRanges = [
   },
 ];
 
+// const reg = /\$[0-9]+\s-[0-9]+\$/
+
 const ShopProductsSideBar = () => {
   const { data, isLoading } = useGetFiltersQuery();
+
+  const {
+    pricesFilter,
+    ratingFilter,
+    searchFilter,
+    categoriesFilter,
+    toggleCategoryFilterItem,
+    togglePerPageFilterItem,
+    togglePriceFilterItem,
+    toggleRatingFilterItem,
+    toggleSearchFilterItem,
+  } = useFilterProducts();
 
   console.log("data", data);
 
@@ -76,93 +91,58 @@ const ShopProductsSideBar = () => {
       <StyledFilterSection>
         <StyledHeading>Rating Item</StyledHeading>
         <StyledList>
-          <StyledRatingListItem>
-            <StyledBrandCheckBox
-              id="brand"
-              disableRipple
-              icon={<UilUnCheckedBox fill="#FFCC2E" backgroundFill="#FFF6DA" />}
-              checkedIcon={
-                <UilUnCheckedBox fill="white" backgroundFill="#FFCC2E" />
-              }
-            />
-            <StyledItemRating name="read-only" value={1} readOnly />
-            <StyledTotalRatings>(25)</StyledTotalRatings>
-          </StyledRatingListItem>
-          <StyledRatingListItem>
-            <StyledBrandCheckBox
-              id="brand"
-              disableRipple
-              icon={<UilUnCheckedBox fill="#FFCC2E" backgroundFill="#FFF6DA" />}
-              checkedIcon={
-                <UilUnCheckedBox fill="white" backgroundFill="#FFCC2E" />
-              }
-            />
-            <StyledItemRating name="read-only" value={2} readOnly />
-            <StyledTotalRatings>(25)</StyledTotalRatings>
-          </StyledRatingListItem>
-          <StyledRatingListItem>
-            <StyledBrandCheckBox
-              id="brand"
-              disableRipple
-              icon={<UilUnCheckedBox fill="#FFCC2E" backgroundFill="#FFF6DA" />}
-              checkedIcon={
-                <UilUnCheckedBox fill="white" backgroundFill="#FFCC2E" />
-              }
-            />
-            <StyledItemRating name="read-only" value={3} readOnly />
-            <StyledTotalRatings>(25)</StyledTotalRatings>
-          </StyledRatingListItem>
-          <StyledRatingListItem>
-            <StyledBrandCheckBox
-              id="brand"
-              disableRipple
-              icon={<UilUnCheckedBox fill="#FFCC2E" backgroundFill="#FFF6DA" />}
-              checkedIcon={
-                <UilUnCheckedBox fill="white" backgroundFill="#FFCC2E" />
-              }
-            />
-            <StyledItemRating name="read-only" value={4} readOnly />
-            <StyledTotalRatings>(25)</StyledTotalRatings>
-          </StyledRatingListItem>
-          <StyledRatingListItem>
-            <StyledBrandCheckBox
-              id="brand"
-              disableRipple
-              icon={<UilUnCheckedBox fill="#FFCC2E" backgroundFill="#FFF6DA" />}
-              checkedIcon={
-                <UilUnCheckedBox fill="white" backgroundFill="#FFCC2E" />
-              }
-            />
-            <StyledItemRating name="read-only" value={5} readOnly />
-            <StyledTotalRatings>(25)</StyledTotalRatings>
-          </StyledRatingListItem>
+          {data &&
+            data.ratings.map((rating, index) => (
+              <StyledRatingListItem key={rating.starsNumber}>
+                <StyledBrandCheckBox
+                  id="brand"
+                  disableRipple
+                  icon={
+                    <UilUnCheckedBox fill="#FFCC2E" backgroundFill="#FFF6DA" />
+                  }
+                  checkedIcon={
+                    <UilUnCheckedBox fill="white" backgroundFill="#FFCC2E" />
+                  }
+                  checked={rating.starsNumber == +ratingFilter}
+                  onClick={() => {
+                    return toggleRatingFilterItem(
+                      rating.starsNumber.toString()
+                    );
+                  }}
+                />
+                <StyledItemRating
+                  name="read-only"
+                  value={rating.starsNumber}
+                  readOnly
+                />
+                <StyledTotalRatings>({rating.reviews})</StyledTotalRatings>
+              </StyledRatingListItem>
+            ))}
         </StyledList>
       </StyledFilterSection>
       <StyledFilterSection>
         <StyledHeading>Categories</StyledHeading>
         <StyledList>
-          <StyledListItem>
-            <StyledBrandCheckBox
-              id="brand"
-              disableRipple
-              icon={<UilUnCheckedBox />}
-              checkedIcon={
-                <UilUnCheckedBox backgroundFill="#FB2E86" fill="white" />
-              }
-            />
-            <StyledLabel htmlFor="brand">Prestashop</StyledLabel>
-          </StyledListItem>
-          <StyledListItem>
-            <StyledBrandCheckBox
-              id="brand"
-              disableRipple
-              icon={<UilUnCheckedBox />}
-              checkedIcon={
-                <UilUnCheckedBox backgroundFill="#FB2E86" fill="white" />
-              }
-            />
-            <StyledLabel htmlFor="brand">Magento</StyledLabel>
-          </StyledListItem>
+          {data &&
+            data.categories.map((category, index) => (
+              <StyledListItem key={category.id}>
+                <StyledBrandCheckBox
+                  id={`category-filter-${category.id}`}
+                  disableRipple
+                  icon={<UilUnCheckedBox />}
+                  checkedIcon={
+                    <UilUnCheckedBox backgroundFill="#FB2E86" fill="white" />
+                  }
+                  onClick={() =>
+                    toggleCategoryFilterItem(category.id.toString())
+                  }
+                  checked={categoriesFilter.includes(category.id.toString())}
+                />
+                <StyledLabel htmlFor={`category-filter-${category.id}`}>
+                  {category.name}
+                </StyledLabel>
+              </StyledListItem>
+            ))}
         </StyledList>
       </StyledFilterSection>
       <StyledFilterSection>
@@ -177,6 +157,9 @@ const ShopProductsSideBar = () => {
                 checkedIcon={
                   <UilUnCheckedBox backgroundFill="#FB2E86" fill="white" />
                 }
+                value={pricesFilter}
+                checked={item.range == pricesFilter}
+                onChange={() => togglePriceFilterItem(item.range)}
               />
               <StyledPriceFilterLabel htmlFor={`price-filter-${item.id}`}>
                 {item.range}
@@ -184,7 +167,11 @@ const ShopProductsSideBar = () => {
             </StyledListItem>
           ))}
         </StyledList>
-        <PriceFilterInput placeholder="$10.00 - 20000$" />
+        <PriceFilterInput
+          placeholder="$10.00 - 20000$"
+          value={searchFilter}
+          onChange={(e) => toggleSearchFilterItem(e.target.value)}
+        />
       </StyledFilterSection>
     </StyledAside>
   );

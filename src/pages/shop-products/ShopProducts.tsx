@@ -8,6 +8,8 @@ import ProductList from "./shop-products-content/product-list/ProductList";
 import ProductItemCard from "./shop-products-content/product-item-card.tsx/ProductItemCard";
 import { ProductItem } from "./shop-product.type";
 import ProductImage from "../../assets/product-watch.png";
+import { useGetShopProductsQuery } from "../../redux/services/shop-products/shopProductApi";
+import { useFilterProducts } from "./hooks/useFilterProducts";
 
 const productsList: ProductItem[] = [
   {
@@ -49,19 +51,41 @@ const productsList: ProductItem[] = [
 ];
 
 const ShopProducts = () => {
+  const {
+    perPageFilter,
+    pricesFilter,
+    ratingFilter,
+    searchFilter,
+    categoriesFilter,
+    sortFilter,
+  } = useFilterProducts();
+
+  const { data, isLoading } = useGetShopProductsQuery({
+    perPage: perPageFilter,
+    rating: ratingFilter,
+    prices: pricesFilter,
+    search: searchFilter,
+    categoryIds: categoriesFilter,
+    sort: sortFilter,
+  });
+
+  console.log("list data", data);
+
   return (
     <>
       <ShopProductsFilter />
       <Container>
         <StyledMainLayout>
           <ShopProductsSideBar />
-          <ShopProductsContent>
-            <ProductList>
-              {productsList.map((product) => (
-                <ProductItemCard key={product.id} product={product} />
-              ))}
-            </ProductList>
-          </ShopProductsContent>
+          {data && (
+            <ShopProductsContent>
+              <ProductList>
+                {data.data.map((product) => (
+                  <ProductItemCard key={product.id} product={product} />
+                ))}
+              </ProductList>
+            </ShopProductsContent>
+          )}
         </StyledMainLayout>
       </Container>
     </>

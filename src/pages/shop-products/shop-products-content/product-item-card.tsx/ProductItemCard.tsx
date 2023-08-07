@@ -2,7 +2,6 @@ import { Rating } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
-import { ProductItem } from "../../shop-product.type";
 import {
   StyledActionFooter,
   StyledButtonIcon,
@@ -16,9 +15,10 @@ import {
   StyledProductPrice,
   StyledProductPricing,
 } from "./ProductItemCard.styles";
+import { CustomerProducts } from "../../../../redux/services/shop-products/shopProductApi";
 
 interface Props {
-  product: ProductItem;
+  product: CustomerProducts;
 }
 
 const ProductItemCard = ({ product }: Props) => {
@@ -30,8 +30,14 @@ const ProductItemCard = ({ product }: Props) => {
           <StyledProductName>{product.name}</StyledProductName>
           <StyledProductPricing>
             <StyledProductPrice>{product.price}$</StyledProductPrice>
-            <StyledProductDiscount>{product.discount}$</StyledProductDiscount>
-            <Rating name="read-only" value={product.rating} readOnly />
+            <StyledProductDiscount>
+              {product.discount?.value}$
+            </StyledProductDiscount>
+            <Rating
+              name="read-only"
+              value={product.averageRating || 0}
+              readOnly
+            />
           </StyledProductPricing>
           <StyledProductDescription>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Magna in

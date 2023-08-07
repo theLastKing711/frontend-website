@@ -3,7 +3,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 interface QueryParams {
   perPage?: string;
-  categoryIds?: number[];
+  sort: string;
+  categoryIds?: string[];
   rating?: string;
   prices?: string;
   search?: string;
@@ -11,6 +12,7 @@ interface QueryParams {
 
 export interface CustomerProducts {
     id: number;
+    imagePath: string;
     name: string;
     price: number;
     isBestSeller: boolean;
@@ -39,24 +41,28 @@ export interface CustomerCategory {
   }
 
 export interface FilterListResponse {
-    categoriesList: CustomerCategory[];
-    ratingsList: productRatingFilterDto[]
+    categories: CustomerCategory[];
+    ratings: productRatingFilterDto[]
 }
 
 export const productsListApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/customer-product' }),
     tagTypes: ['CustomerProducts'],
     endpoints: (build) => ({
-      getShopProducts: build.query<CustomerProductsResponse, QueryParams>({
-        query: (params) => buildQueryParams(params),
+      getShopProducts: build.query<CustomerProductsResponse, QueryParams | void>({
+        query: (params) => params ? buildQueryParams(params) : "",
       }),
       getFilters: build.query<FilterListResponse, void>({
         query: () => 'filters',
       }),
     })
-  })
+  });
 
   const buildQueryParams = (params: QueryParams) => {
+
+
+    console.log("params", params);
+    
     let queryParamsString = '';
 
     const appendStart = (key: string, value: string) => {
@@ -78,11 +84,32 @@ export const productsListApi = createApi({
         }
     }
 
+    const BuildArrayQueryParams = (key: string, values: string[]) => {
+
+      values.forEach( (item, index) => {
+        if(index === 0 && isQueryEmpty()) {
+          appendStart(key, item)
+        }
+        else {
+          appendMiddle(key, item);
+        }
+      })
+    };
+
     const isQueryEmpty =  () => queryParamsString.length === 0;
+
+    if(params.categoryIds && params.categoryIds.length > 0) {
+      BuildArrayQueryParams('categoryIds', params.categoryIds);
+    }
     
     if(params.perPage) {
         buildQueryItem('perPage', params.perPage);
     }
+
+    if(params.sort) {
+      buildQueryItem('sort', params.sort);
+    }
+    
     if(params.rating) {
         buildQueryItem('rating', params.rating);
     }
