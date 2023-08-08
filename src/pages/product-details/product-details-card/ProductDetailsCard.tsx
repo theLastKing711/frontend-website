@@ -30,14 +30,19 @@ import {
   StyledSubHeading,
   StyledTwitterIconButton,
 } from "./ProductDetailsCard.styles";
+import { CustomerProducts } from "../../../redux/services/shop-products/shopProductApi";
 
-const ProductDetailsCard = () => {
+interface Props {
+  product: CustomerProducts;
+}
+
+const ProductDetailsCard = ({ product }: Props) => {
   return (
     <StyledProductDetailsPaper>
       <StyledCardMainContainer>
         <StyledProductImage src={FirstProductImage} />
         <StyledProductDetails>
-          <StyledCardHeading>Playwood arm chair</StyledCardHeading>
+          <StyledCardHeading>{product.name}</StyledCardHeading>
           <StyledRatingContainer>
             <StyledProductRating value={5} readOnly />
             <StyledProductRatingTotal>(22)</StyledProductRatingTotal>
