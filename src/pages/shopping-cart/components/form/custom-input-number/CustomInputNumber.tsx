@@ -1,50 +1,36 @@
-import { useState } from "react";
 import {
   MainContainer,
   ActionButton,
   SpinButton,
 } from "./CustomInputNumbert.styles";
 
-const minValue = 1;
-const maxValue = 100;
-
 interface Props {
   inputValue: number;
+  minValue: number;
+  maxValue: number;
   label: string;
   handleIncrement: () => void;
   handleDecrement: () => void;
-  handleResetValueSet: () => void;
-  handleMaxValueSet: () => void;
+  handleResetValueSet: (minValue: number) => void;
+  handleMaxValueSet: (maxValue: number) => void;
 }
 
 const CustomInputNumber = ({
   inputValue,
+  minValue,
+  maxValue,
   label,
   handleDecrement,
   handleIncrement,
   handleMaxValueSet,
   handleResetValueSet,
 }: Props) => {
-  const [value, setValue] = useState(inputValue);
-
-  const isValueAtMax = () => {
-    return value === maxValue;
+  const isToBeGreaterThanMax = () => {
+    return inputValue + 1 > maxValue;
   };
 
-  const isValueAtMin = () => {
-    return value === minValue;
-  };
-
-  const incrementValue = () => {
-    if (!isValueAtMax()) {
-      setValue((prev) => prev + 1);
-    }
-  };
-
-  const decrementValue = () => {
-    if (!isValueAtMin()) {
-      setValue((prev) => prev - 1);
-    }
+  const isToBeLessThanMin = () => {
+    return inputValue - 1 < minValue;
   };
 
   const handleSpinButtonKeyPressed = (
@@ -55,19 +41,27 @@ const CustomInputNumber = ({
     }
     switch (e.key) {
       case "ArrowUp": {
+        if (isToBeGreaterThanMax()) {
+          break;
+        }
+
         handleIncrement();
         break;
       }
       case "ArrowDown": {
+        if (isToBeLessThanMin()) {
+          break;
+        }
+
         handleDecrement();
         break;
       }
       case "Home": {
-        setValue(1);
+        handleResetValueSet(minValue);
         break;
       }
       case "End": {
-        setValue(100);
+        handleMaxValueSet(maxValue);
         break;
       }
       default:
@@ -78,7 +72,12 @@ const CustomInputNumber = ({
   return (
     <MainContainer>
       <ActionButton
-        onClick={handleDecrement}
+        onClick={() => {
+          if (isToBeLessThanMin()) {
+            return;
+          }
+          handleDecrement();
+        }}
         tabIndex={-1}
         aria-label="decrease value"
       >
@@ -89,14 +88,19 @@ const CustomInputNumber = ({
         tabIndex={0}
         aria-valuemin={0}
         aria-aria-valuemax={100}
-        aria-valuenow={value}
+        aria-valuenow={inputValue}
         aria-label={label}
         onKeyDown={handleSpinButtonKeyPressed}
       >
-        {value}
+        {inputValue}
       </SpinButton>
       <ActionButton
-        onClick={handleIncrement}
+        onClick={() => {
+          if (isToBeGreaterThanMax()) {
+            return;
+          }
+          handleIncrement();
+        }}
         tabIndex={-1}
         aria-label="increase value"
       >

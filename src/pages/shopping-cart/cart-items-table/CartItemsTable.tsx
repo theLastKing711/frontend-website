@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 
 import RemoveProductImage from "../../../assets/remove-cart-item.png";
-import ProductImage from "../../../assets/shopping-cart-item.png";
 import {
   StyledActionButton,
   StyledFooterTableCell,
@@ -24,25 +23,37 @@ import {
   StyledTotalPrice,
 } from "./CartItemsTable.styles";
 import CustomInputNumber from "../components/form/custom-input-number/CustomInputNumber";
+import { LatestProductItemDto } from "../../../redux/services/home/homeApi";
 
-function createData(
-  name: string,
-  price: number,
-  quantity: number,
-  total: number
-) {
-  return { name, price, quantity, total };
+interface Props {
+  products: LatestProductItemDto[];
+  minQuantity: number;
+  maxQuantity: number;
+  handleClearCartClicked: () => void;
+  handleDeleteButtonClicked: (id: number) => void;
+  handleQuantityIncreasedClicked: (id: number) => void;
+  handleQuantityDecreasedClicked: (id: number) => void;
+  handleMaxValueSet: (id: number) => void;
+  handleMinValueSet: (id: number) => void;
+  // handleQuantitySet: (id: number) => void;
 }
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24),
-  createData("Ice cream sandwich", 237, 9.0, 37),
-  createData("Eclair", 262, 16.0, 24),
-  createData("Cupcake", 305, 3.7, 67),
-  createData("Gingerbread", 356, 16.0, 49),
-];
+const CartItemsTable = ({
+  products,
+  minQuantity,
+  maxQuantity,
+  handleClearCartClicked,
+  handleDeleteButtonClicked,
+  handleQuantityDecreasedClicked,
+  handleQuantityIncreasedClicked,
+  handleMaxValueSet,
+  handleMinValueSet,
+}: // handleQuantitySet,
+Props) => {
+  const caluclateProductTotal = (price: number, quantity: number) => {
+    return price * quantity;
+  };
 
-const CartItemsTable = () => {
   return (
     <TableContainer component="div">
       <Table sx={{ minWidth: 650 }} aria-label="shopping cart table">
@@ -55,15 +66,17 @@ const CartItemsTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
+          {products.map((row) => (
+            <TableRow key={row.id}>
               <TableCell component="th" scope="row">
                 <StyledProductDetailsContainer>
                   <StyledProductContainer>
-                    <StyledRemoveProductButton>
+                    <StyledRemoveProductButton
+                      onClick={() => handleDeleteButtonClicked(row.id)}
+                    >
                       <Box component="img" src={RemoveProductImage} />
                     </StyledRemoveProductButton>
-                    <StyledProductImage src={ProductImage} />
+                    <StyledProductImage src={row.imagePath} />
                   </StyledProductContainer>
                   <StyledProductName>{row.name}</StyledProductName>
                 </StyledProductDetailsContainer>
@@ -72,21 +85,36 @@ const CartItemsTable = () => {
                 <StyledProductPrice>${row.price}</StyledProductPrice>
               </TableCell>
               <TableCell align="left">
-                {/* <CustomInputNumber label="product-quantity" inputValue={1} /> */}
+                <CustomInputNumber
+                  label="product-quantity"
+                  inputValue={row.quantity}
+                  minValue={minQuantity}
+                  maxValue={maxQuantity}
+                  handleDecrement={() => handleQuantityDecreasedClicked(row.id)}
+                  handleIncrement={() => {
+                    handleQuantityIncreasedClicked(row.id);
+                  }}
+                  handleMaxValueSet={() => handleMaxValueSet(row.id)}
+                  handleResetValueSet={() => handleMinValueSet(row.id)}
+                />
               </TableCell>
               <TableCell align="left">
-                <StyledTotalPrice>${row.total}</StyledTotalPrice>
+                <StyledTotalPrice>
+                  ${caluclateProductTotal(row.price, 1)}
+                </StyledTotalPrice>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
         <TableFooter>
           <TableRow>
-            <StyledFooterTableCell colSpan={2}>
-              <StyledActionButton>Update Cart</StyledActionButton>
-            </StyledFooterTableCell>
-            <StyledFooterTableCell colSpan={2} align="right">
-              <StyledActionButton>Clear Cart</StyledActionButton>
+            {/* <StyledFooterTableCell colSpan={2}> */}
+            {/* <StyledActionButton>Update Cart</StyledActionButton> */}
+            {/* </StyledFooterTableCell> */}
+            <StyledFooterTableCell colSpan="4" align="right">
+              <StyledActionButton onClick={handleClearCartClicked}>
+                Clear Cart
+              </StyledActionButton>
             </StyledFooterTableCell>
           </TableRow>
         </TableFooter>

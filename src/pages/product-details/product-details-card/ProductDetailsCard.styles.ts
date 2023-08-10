@@ -2,7 +2,12 @@ import { Button, Chip, IconButton, Paper, Rating, styled } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export const StyledProductDetailsPaper = styled(Paper)( ( { theme }) => ({
+    display: "flex",
+    gap: "2.56rem",
     padding: '0.81rem 1rem 0.56rem 0.81rem',
+    '@media screen and (max-width: 1200px)': {
+        flexDirection: 'column',
+    }
 }));
 
 
@@ -11,11 +16,15 @@ export const StyledCardMainContainer = styled('div')( ({ theme }) => ({
     gap: '2.75rem',
     alignItems: 'center',
     '@media screen and (max-width: 1200px)': {
-        flexDirection: 'column',
+        display: "flex",
+        justifyContent: "center",
     }
+
 }));
 
 export const StyledProductImage = styled('img')( ({ theme }) => ({
+    maxWidth: "400px",
+
     // flex: 1,
     // height: "30.4rem",
 }));

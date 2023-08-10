@@ -8,8 +8,14 @@ import ProductList from "./shop-products-content/product-list/ProductList";
 import ProductItemCard from "./shop-products-content/product-item-card.tsx/ProductItemCard";
 import { ProductItem } from "./shop-product.type";
 import ProductImage from "../../assets/product-watch.png";
-import { useGetShopProductsQuery } from "../../redux/services/shop-products/shopProductApi";
+import {
+  CustomerProducts,
+  useGetShopProductsQuery,
+} from "../../redux/services/shop-products/shopProductApi";
 import { useFilterProducts } from "./hooks/useFilterProducts";
+import { useCartItems } from "../../redux/features/saved-cart-items/hooks/useCartItems";
+import { useDispatch } from "react-redux";
+import { toggleItem } from "../../redux/features/saved-cart-items/savedCartItems";
 
 const productsList: ProductItem[] = [
   {
@@ -69,7 +75,22 @@ const ShopProducts = () => {
     sort: sortFilter,
   });
 
-  console.log("list data", data);
+  const { isItemInCart } = useCartItems();
+
+  const dispatch = useDispatch();
+
+  const handleProductCartToggled = (product: CustomerProducts) => {
+    dispatch(
+      toggleItem({
+        id: product.id,
+        discount: product.discount,
+        imagePath: product.imagePath,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+      })
+    );
+  };
 
   return (
     <>
@@ -81,7 +102,14 @@ const ShopProducts = () => {
             <ShopProductsContent>
               <ProductList>
                 {data.data.map((product) => (
-                  <ProductItemCard key={product.id} product={product} />
+                  <ProductItemCard
+                    key={product.id}
+                    product={product}
+                    isProductAdded={isItemInCart(product.id)}
+                    handleToggleProduct={() =>
+                      handleProductCartToggled(product)
+                    }
+                  />
                 ))}
               </ProductList>
             </ShopProductsContent>

@@ -11,7 +11,11 @@ import {
   StyledTotalSection,
 } from "./CartTotals.styles";
 
-const CartTotals = () => {
+interface Props {
+  total: number;
+}
+
+const CartTotals = ({ total }: Props) => {
   return (
     <div>
       <StyledHeading>Cart Totals</StyledHeading>
@@ -19,11 +23,11 @@ const CartTotals = () => {
         <StyledTotalContainer>
           <StyledRow>
             <StyledSubHeading>Subtotals:</StyledSubHeading>
-            <StyledPrice>£219.00</StyledPrice>
+            <StyledPrice>${total}</StyledPrice>
           </StyledRow>
           <StyledRow>
             <StyledSubHeading>Totals:</StyledSubHeading>
-            <StyledPrice>£325.00</StyledPrice>
+            <StyledPrice>${total}</StyledPrice>
           </StyledRow>
         </StyledTotalContainer>
         <StyledShippingAndTaxDiv>

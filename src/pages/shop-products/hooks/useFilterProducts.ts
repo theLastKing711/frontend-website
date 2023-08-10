@@ -126,16 +126,17 @@ export const useFilterProducts = () => {
         
     }
 
-    const toggleSearchFilterItem = (search: string) => {
-
+    const togglePriceTextFilterItem = (prices: string) => {
+        
+        
         setSerchParams(prev => {
             
-            if ( search ) {
-                prev.set('search', search);
+            if ( prices ) {
+                prev.set('prices', prices);
             }
             else
             {
-                prev.delete('search');
+                prev.delete('prices');
             }
             
             return prev;
@@ -156,7 +157,7 @@ export const useFilterProducts = () => {
         togglePerPageFilterItem,
         togglePriceFilterItem,
         toggleRatingFilterItem,
-        toggleSearchFilterItem,
+        togglePriceTextFilterItem,
     }
 
 }

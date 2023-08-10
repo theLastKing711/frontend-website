@@ -1,3 +1,4 @@
+import { isPriceSearchValid } from './../../../pages/shop-products/shop-products-side-bar/ShopProductsSideBar';
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 
@@ -18,6 +19,10 @@ export interface CustomerProducts {
     isBestSeller: boolean;
     discount: ResponseDiscount | null;
     averageRating: number;
+  }
+
+  export interface CustomerProductDetails extends CustomerProducts {
+    totalReviews: number;
   }
   
   interface ResponseDiscount {
@@ -46,6 +51,7 @@ export interface FilterListResponse {
 }
 
 export const productsListApi = createApi({
+    reducerPath: "productListApi",
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/customer-product' }),
     tagTypes: ['CustomerProducts'],
     endpoints: (build) => ({
@@ -55,11 +61,13 @@ export const productsListApi = createApi({
       getFilters: build.query<FilterListResponse, void>({
         query: () => 'filters',
       }),
+      getProduct: build.query<CustomerProductDetails, string>({
+        query: (params) => params,
+      }),
     })
   });
 
   const buildQueryParams = (params: QueryParams) => {
-
 
     console.log("params", params);
     
@@ -107,6 +115,7 @@ export const productsListApi = createApi({
     }
 
     if(params.sort) {
+      console.log("params sort", params.sort);
       buildQueryItem('sort', params.sort);
     }
     
@@ -114,15 +123,23 @@ export const productsListApi = createApi({
         buildQueryItem('rating', params.rating);
     }
     if(params.prices) {
-        buildQueryItem('prices', params.prices);
+
+        console.log("params prices", params.prices);
+      
+        if(isPriceSearchValid(params.prices)) {
+          buildQueryItem('prices', params.prices);
+        }
     }
-    if(params.search) {
-        buildQueryItem('search', params.search);
-    }
+    // if(params.search) {
+        
+    //       buildQueryItem('search', params.search);
+    // }
+
+    console.log("query params", queryParamsString);
     
     return queryParamsString;
     
   }
   
   
-  export const { useGetShopProductsQuery, useGetFiltersQuery } = productsListApi;
+  export const { useGetShopProductsQuery, useGetFiltersQuery, useGetProductQuery } = productsListApi;

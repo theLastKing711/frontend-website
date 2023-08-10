@@ -40,7 +40,11 @@ const priceFilterRanges = [
   },
 ];
 
-// const reg = /\$[0-9]+\s-[0-9]+\$/
+export const isPriceSearchValid = (value: string) => {
+  const reg = /^\$\d+(\.\d+)?((\s-\s*\$\d+(\.\d+)?))|(\s*\+)$/;
+
+  return reg.test(value);
+};
 
 const ShopProductsSideBar = () => {
   const { data, isLoading } = useGetFiltersQuery();
@@ -51,13 +55,12 @@ const ShopProductsSideBar = () => {
     searchFilter,
     categoriesFilter,
     toggleCategoryFilterItem,
-    togglePerPageFilterItem,
     togglePriceFilterItem,
     toggleRatingFilterItem,
-    toggleSearchFilterItem,
+    togglePriceTextFilterItem,
   } = useFilterProducts();
 
-  console.log("data", data);
+  console.log("search filter", searchFilter);
 
   return (
     <StyledAside>
@@ -167,14 +170,19 @@ const ShopProductsSideBar = () => {
             </StyledListItem>
           ))}
         </StyledList>
-        <PriceFilterInput
+        {/* <PriceFilterInput
           placeholder="$10.00 - 20000$"
-          value={searchFilter}
-          onChange={(e) => toggleSearchFilterItem(e.target.value)}
-        />
+          value={pricesFilter}
+          error={!isPriceSearchValid(pricesFilter) && pricesFilter}
+          onChange={(e) => {
+            togglePriceTextFilterItem(e.target.value);
+          }}
+        /> */}
       </StyledFilterSection>
     </StyledAside>
   );
 };
 
 export default ShopProductsSideBar;
+
+// ^\$\d+(\.\d+)?((\s-\s*\$\d+(\.\d+)?))|(\s*\+)$

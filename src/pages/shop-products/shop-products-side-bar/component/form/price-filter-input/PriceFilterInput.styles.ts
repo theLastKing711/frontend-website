@@ -27,3 +27,10 @@ export const StyledFilterInput = styled(InputBase)( ({ theme }) => ({
     }
     
 }));
+
+export const StyledErrorText = styled('p')( ({ theme }) => ({ 
+    fontSize: "0.84rem",
+    color: "red",
+    marginTop: "0.25rem",
+}));
+

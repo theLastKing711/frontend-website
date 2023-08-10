@@ -30,75 +30,86 @@ import {
   StyledSubHeading,
   StyledTwitterIconButton,
 } from "./ProductDetailsCard.styles";
-import { CustomerProducts } from "../../../redux/services/shop-products/shopProductApi";
+import { CustomerProductDetails } from "../../../redux/services/shop-products/shopProductApi";
 
 interface Props {
-  product: CustomerProducts;
+  product: CustomerProductDetails;
+  isAddedToCart: boolean;
+  toggleProduct: () => void;
 }
 
-const ProductDetailsCard = ({ product }: Props) => {
+const ProductDetailsCard = ({
+  product,
+  isAddedToCart,
+  toggleProduct,
+}: Props) => {
+  const addToCartText = isAddedToCart ? "Remove From Cart" : "Add To Cart";
+
   return (
     <StyledProductDetailsPaper>
       <StyledCardMainContainer>
-        <StyledProductImage src={FirstProductImage} />
-        <StyledProductDetails>
-          <StyledCardHeading>{product.name}</StyledCardHeading>
-          <StyledRatingContainer>
-            <StyledProductRating value={5} readOnly />
-            <StyledProductRatingTotal>(22)</StyledProductRatingTotal>
-          </StyledRatingContainer>
-          <StyledPricingContainer>
-            <StyledProductPrice>$32.00</StyledProductPrice>
-            <StyledProductDiscount>$32.00</StyledProductDiscount>
-          </StyledPricingContainer>
-          <StyledProductDescription>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-            tellus porttitor purus, et volutpat sit.
-          </StyledProductDescription>
-          <StyledProductActionsContainer>
-            <StyledAddToCartButton variant="text">
-              Add To Cart
-            </StyledAddToCartButton>
-            <StyledFavouriteIconButton>
-              <FavoriteBorderIcon />
-            </StyledFavouriteIconButton>
-          </StyledProductActionsContainer>
-          <StyledCategoriesContainer>
-            <StyledSubHeading>Categories:</StyledSubHeading>
-            <StyledCategoriesChip
-              size="small"
-              label="First category"
-              color="primary"
-            />
-          </StyledCategoriesContainer>
-          <StyledCategoriesContainer>
-            <StyledSubHeading>Share:</StyledSubHeading>
-            <StyledSocailsList>
-              <StyledSocailsItem>
-                <StyledSocailsItemLink to="https://facebook.com">
-                  <StyledFaceBookIconButton>
-                    <FacebookIcon />
-                  </StyledFaceBookIconButton>
-                </StyledSocailsItemLink>
-              </StyledSocailsItem>
-              <StyledSocailsItem>
-                <StyledSocailsItemLink to="https://instagram.com">
-                  <StyledInstagramIconButton>
-                    <InstagramIcon />
-                  </StyledInstagramIconButton>
-                </StyledSocailsItemLink>
-              </StyledSocailsItem>
-              <StyledSocailsItem>
-                <StyledSocailsItemLink to="https://twitter.com">
-                  <StyledTwitterIconButton>
-                    <TwitterIcon />
-                  </StyledTwitterIconButton>
-                </StyledSocailsItemLink>
-              </StyledSocailsItem>
-            </StyledSocailsList>
-          </StyledCategoriesContainer>
-        </StyledProductDetails>
+        <StyledProductImage src={product.imagePath} />
       </StyledCardMainContainer>
+
+      <StyledProductDetails>
+        <StyledCardHeading>{product.name}</StyledCardHeading>
+        <StyledRatingContainer>
+          <StyledProductRating value={product.averageRating} readOnly />
+          <StyledProductRatingTotal>
+            ({product.totalReviews})
+          </StyledProductRatingTotal>
+        </StyledRatingContainer>
+        <StyledPricingContainer>
+          <StyledProductPrice>{product.price}</StyledProductPrice>
+          <StyledProductDiscount>{product.averageRating}</StyledProductDiscount>
+        </StyledPricingContainer>
+        <StyledProductDescription>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tellus
+          porttitor purus, et volutpat sit.
+        </StyledProductDescription>
+        <StyledProductActionsContainer>
+          <StyledAddToCartButton variant="text" onClick={toggleProduct}>
+            {addToCartText}
+          </StyledAddToCartButton>
+          <StyledFavouriteIconButton>
+            <FavoriteBorderIcon />
+          </StyledFavouriteIconButton>
+        </StyledProductActionsContainer>
+        <StyledCategoriesContainer>
+          <StyledSubHeading>Categories:</StyledSubHeading>
+          <StyledCategoriesChip
+            size="small"
+            label="First category"
+            color="primary"
+          />
+        </StyledCategoriesContainer>
+        <StyledCategoriesContainer>
+          <StyledSubHeading>Share:</StyledSubHeading>
+          <StyledSocailsList>
+            <StyledSocailsItem>
+              <StyledSocailsItemLink to="https://facebook.com">
+                <StyledFaceBookIconButton>
+                  <FacebookIcon />
+                </StyledFaceBookIconButton>
+              </StyledSocailsItemLink>
+            </StyledSocailsItem>
+            <StyledSocailsItem>
+              <StyledSocailsItemLink to="https://instagram.com">
+                <StyledInstagramIconButton>
+                  <InstagramIcon />
+                </StyledInstagramIconButton>
+              </StyledSocailsItemLink>
+            </StyledSocailsItem>
+            <StyledSocailsItem>
+              <StyledSocailsItemLink to="https://twitter.com">
+                <StyledTwitterIconButton>
+                  <TwitterIcon />
+                </StyledTwitterIconButton>
+              </StyledSocailsItemLink>
+            </StyledSocailsItem>
+          </StyledSocailsList>
+        </StyledCategoriesContainer>
+      </StyledProductDetails>
     </StyledProductDetailsPaper>
   );
 };

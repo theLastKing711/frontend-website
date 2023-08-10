@@ -1,4 +1,4 @@
-import { IconButton, Paper, styled } from "@mui/material";
+import { IconButton, IconButtonProps, Paper, styled } from "@mui/material";
 
 
 export const StyledProductPaper = styled(Paper)(({ theme}) => ({
@@ -79,9 +79,11 @@ export const StyledActionFooter = styled('footer')( ({ theme } ) => ({
     gap: '1.19rem',
 }));
 
-export const StyledButtonIcon = styled(IconButton)( ({ theme } ) => ({
+export const StyledButtonIcon = styled(IconButton)<IconButtonProps & {isAddedToCart?: boolean}>( ({ theme, isAddedToCart = false } ) => ({
     backgroundColor: 'white',
     '& svg': {
-        fill: "#535399",
+        fill: `${isAddedToCart ? "#2F1AC4" : "light blue"} `,
     }
+    
+    
 }));

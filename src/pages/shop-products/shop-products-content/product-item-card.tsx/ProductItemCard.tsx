@@ -19,9 +19,15 @@ import { CustomerProducts } from "../../../../redux/services/shop-products/shopP
 
 interface Props {
   product: CustomerProducts;
+  isProductAdded: boolean;
+  handleToggleProduct: () => void;
 }
 
-const ProductItemCard = ({ product }: Props) => {
+const ProductItemCard = ({
+  product,
+  isProductAdded,
+  handleToggleProduct,
+}: Props) => {
   return (
     <StyledProductPaper>
       <StyledContent>
@@ -44,7 +50,10 @@ const ProductItemCard = ({ product }: Props) => {
             est adipiscing in phasellus non in justo.
           </StyledProductDescription>
           <StyledActionFooter>
-            <StyledButtonIcon>
+            <StyledButtonIcon
+              onClick={handleToggleProduct}
+              isAddedToCart={isProductAdded}
+            >
               <ShoppingCartOutlinedIcon />
             </StyledButtonIcon>
             <StyledButtonIcon>

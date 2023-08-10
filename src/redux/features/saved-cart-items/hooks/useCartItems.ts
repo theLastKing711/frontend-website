@@ -12,6 +12,13 @@ export const useCartItems = () => {
         return result;
       };
 
-      return { cartProducts, isItemInCart };
+      const calculateTotal = () => {
+         const total = cartProducts
+                        .reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
+
+         return total;
+      }
+
+      return { cartProducts, calculateTotal, isItemInCart };
     
 }

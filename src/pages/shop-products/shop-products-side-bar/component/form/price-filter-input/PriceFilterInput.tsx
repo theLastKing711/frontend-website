@@ -1,25 +1,26 @@
-import { InputProps } from "@mui/material";
-import { StyledFilterInput } from "./PriceFilterInput.styles";
+import { InputBaseProps, InputProps } from "@mui/material";
+import { StyledErrorText, StyledFilterInput } from "./PriceFilterInput.styles";
 import SearchIcon from "@mui/icons-material/Search";
 
 interface Props {
   placeholder: string;
 }
 
-const PriceFilterInput = ({
-  placeholder,
-  value,
-  onChange,
-}: Props & InputProps) => {
+const PriceFilterInput = ({ ...inputProps }: InputBaseProps) => {
+  console.log("error", inputProps.error);
+
   return (
-    <StyledFilterInput
-      inputProps={{
-        placeholder,
-      }}
-      value={value}
-      onChange={onChange}
-      endAdornment={<SearchIcon sx={{ fill: "#BCBDDB" }} />}
-    />
+    <>
+      <StyledFilterInput
+        {...inputProps}
+        endAdornment={<SearchIcon sx={{ fill: "#BCBDDB" }} />}
+      />
+      {inputProps.error && (
+        <StyledErrorText>
+          Text should be of shape like $150.00 - $504.00 or $150 +
+        </StyledErrorText>
+      )}
+    </>
   );
 };
 

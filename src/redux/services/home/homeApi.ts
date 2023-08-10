@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 
 export const homeApi = createApi({
+    reducerPath: "homeApi",
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/home' }),
     tagTypes: ['Post'],
     endpoints: (build) => ({
@@ -26,6 +27,7 @@ export interface HomeResponseDto {
     name: string;
     price: number;
     discount: ResponseDiscount | null;
+    quantity: number;
   }
   
   interface ResponseDiscount {
