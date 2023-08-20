@@ -111,7 +111,7 @@ Props) => {
             {/* <StyledFooterTableCell colSpan={2}> */}
             {/* <StyledActionButton>Update Cart</StyledActionButton> */}
             {/* </StyledFooterTableCell> */}
-            <StyledFooterTableCell colSpan="4" align="right">
+            <StyledFooterTableCell colSpan={4} align="right">
               <StyledActionButton onClick={handleClearCartClicked}>
                 Clear Cart
               </StyledActionButton>

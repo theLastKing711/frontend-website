@@ -14,8 +14,10 @@ export const useCartItems = () => {
 
       const calculateTotal = () => {
          const total = cartProducts
-                        .reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
-
+                        .reduce((accumulator, currentValue) =>
+                         accumulator + (currentValue.price * currentValue.quantity),
+                          0);
+        
          return total;
       }
 

@@ -13,9 +13,12 @@ import {
 
 interface Props {
   total: number;
+  handleCheoutButtonClicked: () => void;
 }
 
-const CartTotals = ({ total }: Props) => {
+const CartTotals = ({ total, handleCheoutButtonClicked }: Props) => {
+  console.log("changing input 2", total);
+
   return (
     <div>
       <StyledHeading>Cart Totals</StyledHeading>
@@ -36,7 +39,9 @@ const CartTotals = ({ total }: Props) => {
             Shipping & taxes calculated at checkout
           </StyledShippingAndTaxText>
         </StyledShippingAndTaxDiv>
-        <StyledProccedButton>Proceed To Checkout</StyledProccedButton>
+        <StyledProccedButton onClick={handleCheoutButtonClicked}>
+          Proceed To Checkout
+        </StyledProccedButton>
       </StyledTotalSection>
     </div>
   );

@@ -1,4 +1,4 @@
-import { ButtonBase, InputBase, Link, Paper, createStyles, styled } from "@mui/material";
+import { ButtonBase, InputBase, Link, Paper, TextField, createStyles, styled } from "@mui/material";
 
 
 export const StyledMain = styled('main')(( {theme} ) => ({
@@ -44,9 +44,9 @@ export const  StyledInputContainer = styled('div')(( {theme} ) => ({
     marginBottom: "1.44rem",
 }));
 
-export const StyledInput = styled(InputBase)(( {theme} ) => ({
+export const StyledInput = styled(TextField)(( {theme} ) => ({
     borderRadius: "0.125rem",
-    border: "1px solid #C2C5E1",
+    // border: "1px solid #C2C5E1",
     background: "#FFF",
     fontFamily: "Lato",
     fontSize: "1rem",
@@ -63,10 +63,10 @@ export const StyledInput = styled(InputBase)(( {theme} ) => ({
             color: "#9096B2",
         },
     },
-    '&:focus-within': {
-        borderColor: theme.palette.primary.main,
-        transition: 'border 0.2s', 
-    }
+    // '&:focus-within': {
+    //     borderColor: theme.palette.primary.main,
+    //     transition: 'border 0.2s', 
+    // }
 }));
 
 export const StyledSubmitButton = styled(ButtonBase)(( {theme} ) => ({

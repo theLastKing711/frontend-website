@@ -1,16 +1,29 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
+import { apiSlice } from "../../../api/apiSlice";
 
 
-export const homeApi = createApi({
-    reducerPath: "homeApi",
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/home' }),
-    tagTypes: ['Post'],
-    endpoints: (build) => ({
-      getHomeData: build.query<HomeResponseDto, void>({
-        query: () => '',
-      }),
-    })
-  })
+const homeUrl = 'home';
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+export const homeApi = apiSlice.injectEndpoints({
+  endpoints: (build) => ({
+    getHomeData: build.query<HomeResponseDto, void>({
+      query: () => `${homeUrl}`,
+    }),
+  }),
+  overrideExisting: false
+});
+
+
+// export const homeApi = createApi({
+//     reducerPath: "homeApi",
+//     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/home' }),
+//     tagTypes: ['Post'],
+//     endpoints: (build) => ({
+//       getHomeData: build.query<HomeResponseDto, void>({
+//         query: () => '',
+//       }),
+//     })
+//   })
 
 
 
@@ -28,6 +41,7 @@ export interface HomeResponseDto {
     price: number;
     discount: ResponseDiscount | null;
     quantity: number;
+    isFavourite?: boolean;
   }
   
   interface ResponseDiscount {
@@ -35,11 +49,12 @@ export interface HomeResponseDto {
     value: number;
   }
 
-export interface FeaturedProductItemDto {
+  export interface FeaturedProductItemDto {
     id: number;
     name: string;
     price: number;
     imagePath: string;
+    isFavourite?: boolean;
   }
   
   export const { useGetHomeDataQuery } = homeApi;

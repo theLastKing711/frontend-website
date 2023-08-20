@@ -2,6 +2,9 @@ import { Box, BoxProps, Container, Link, styled } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useSelector } from "react-redux";
+
+import { tokenSelector } from "../redux/features/auth/auth";
 
 const baseStyled: BoxProps = {
   fontSize: "1rem",
@@ -16,6 +19,10 @@ const StyledMainHeaderItem = styled(Link)(({ theme }) => ({
 }));
 
 const MainHeader = () => {
+  const isUserLogged = useSelector(tokenSelector);
+
+  console.log("");
+
   return (
     <Box
       sx={{
@@ -38,8 +45,13 @@ const MainHeader = () => {
           <Box component="nav">
             <Box component="ul" display="flex" alignItems="center">
               <Box component="li">
-                <StyledMainHeaderItem display="flex" mr={3} gap="0.3rem">
-                  <Box>Login</Box>
+                <StyledMainHeaderItem
+                  href={isUserLogged ? "/test" : "/login"}
+                  display="flex"
+                  mr={3}
+                  gap="0.3rem"
+                >
+                  <Box>{isUserLogged ? "Welcome, vamer" : "Login"}</Box>
                   <PersonIcon />
                 </StyledMainHeaderItem>
               </Box>

@@ -56,7 +56,8 @@ const LatestProductsList = ({ products }: Props) => {
             product={product}
             isAddedToCart={isItemInCart(product.id)}
             handleItemAddedToCart={(item) => {
-              dispatch(toggleItem(item));
+              console.log("item", item);
+              dispatch(toggleItem({ ...item, quantity: 1 }));
             }}
           />
         </Grid>

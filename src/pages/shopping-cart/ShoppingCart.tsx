@@ -11,15 +11,27 @@ import {
   decreaseQuantity,
   increaseQuantity,
 } from "../../redux/features/saved-cart-items/savedCartItems";
+import {
+  CreateInvoiceDetails,
+  CreateInvoiceDto,
+  useCheckoutItemMutation,
+} from "../../redux/services/invoice/invoiceApi";
+import { useNavigate } from "react-router-dom";
+import useAuthControlDialog from "../../hooks/useAuthControlDialog";
+import LogInSignUpDialog from "../../components/ui/log-in-sign-up-dialog/LogInSignUpDialog";
 
 const MIN_VALUE = 1;
 
 const MAX_VALUE = 100;
 
 const ShoppingCart = () => {
-  const { cartProducts, calculateTotal } = useCartItems();
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { closeDialog, isOpen, openIfLoggedDialog } = useAuthControlDialog();
+  const { cartProducts, calculateTotal } = useCartItems();
+  const [checkOutMutation, checkOutResult] = useCheckoutItemMutation();
+
+  console.log("changing input");
 
   const handleProductQuantityIncreased = (id: number) => {
     dispatch(increaseQuantity(id));
@@ -43,8 +55,42 @@ const ShoppingCart = () => {
 
   const shouldShowCartsTable = cartProducts && cartProducts.length > 0;
 
+  const authCheckout = () => {
+    openIfLoggedDialog(checkOut);
+  };
+
+  const checkOut = () => {
+    console.log("cart products", cartProducts);
+
+    const checkOutProducts: CreateInvoiceDetails[] = cartProducts.map(
+      (item) => ({
+        productId: item.id,
+        productQuantity: item.quantity,
+      })
+    );
+
+    const invoiceDto: CreateInvoiceDto = {
+      appUserId: 1,
+      invoiceDetails: checkOutProducts,
+    };
+
+    void checkOutMutation(invoiceDto)
+      .unwrap()
+      .then((res) => {
+        dispatch(emptyCart());
+        navigate("/order-completed");
+      });
+  };
+
   return (
     <StyledMain>
+      <LogInSignUpDialog
+        open={isOpen}
+        onClose={closeDialog}
+        onSuccess={() => {
+          closeDialog();
+        }}
+      />
       <Container>
         {shouldShowCartsTable && (
           <StyledMainGrid>
@@ -63,7 +109,10 @@ const ShoppingCart = () => {
               handleQuantityDecreasedClicked={handleProductQuantityDecreased}
               handleQuantityIncreasedClicked={handleProductQuantityIncreased}
             />
-            <CartTotals total={calculateTotal()} />
+            <CartTotals
+              total={calculateTotal()}
+              handleCheoutButtonClicked={authCheckout}
+            />
           </StyledMainGrid>
         )}
       </Container>

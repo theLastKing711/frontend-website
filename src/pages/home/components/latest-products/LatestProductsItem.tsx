@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import { LatestProductItemDto } from "src/redux/services/home/homeApi";
 
@@ -51,6 +52,11 @@ const StyledShoppingCartIcon = styled(ShoppingCartIcon)(({ theme }) => ({
 }));
 
 const StyledFavoriteBorderIcon = styled(FavoriteBorderIcon)(({ theme }) => ({
+  fill: "light blue",
+  transition: "fill 0.2s",
+}));
+
+const StyledFavoriteIcon = styled(FavoriteIcon)(({ theme }) => ({
   fill: "light blue",
   transition: "fill 0.2s",
 }));
@@ -182,7 +188,11 @@ const LatestProductsItem = ({
               </motion.li>
               <motion.li variants={item}>
                 <StyledIconButton isAddedToCart={isAddedToCart}>
-                  <StyledFavoriteBorderIcon />
+                  {product.isFavourite ? (
+                    <StyledFavoriteIcon />
+                  ) : (
+                    <StyledFavoriteBorderIcon />
+                  )}
                 </StyledIconButton>
               </motion.li>
             </StyledActionBar>

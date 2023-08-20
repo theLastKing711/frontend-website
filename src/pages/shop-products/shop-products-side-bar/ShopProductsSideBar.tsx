@@ -170,14 +170,14 @@ const ShopProductsSideBar = () => {
             </StyledListItem>
           ))}
         </StyledList>
-        {/* <PriceFilterInput
+        <PriceFilterInput
           placeholder="$10.00 - 20000$"
           value={pricesFilter}
           error={!isPriceSearchValid(pricesFilter) && pricesFilter}
           onChange={(e) => {
             togglePriceTextFilterItem(e.target.value);
           }}
-        /> */}
+        />
       </StyledFilterSection>
     </StyledAside>
   );

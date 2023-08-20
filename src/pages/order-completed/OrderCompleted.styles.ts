@@ -1,4 +1,4 @@
-import { ButtonBase, styled } from "@mui/material";
+import { ButtonBase, Link, styled } from "@mui/material";
 
 export const StyledMain = styled('main')( ({ theme }) => ({
     padding: "11.31rem 0 8.25rem",
@@ -6,6 +6,7 @@ export const StyledMain = styled('main')( ({ theme }) => ({
 }));
 
 export const OrderContainer = styled('div')( ({ theme }) => ({
+    isolation: "isolate",
     maxWidth: "42rem",
     padding: "0 1rem",
     margin: "0 auto",
@@ -36,7 +37,8 @@ export const StyledText = styled('p')( ({ theme }) => ({
     marginBottom: "1.6rem",
 }));
 
-export const StyledProccedButton = styled(ButtonBase)( ({ theme }) => ({
+export const StyledProccedLink = styled(Link)( ({ theme }) => ({
+    cursor: "pointer",
     borderRadius: "0.1875rem",
     background: "#FF1788",
     color: "#FFF",
@@ -46,5 +48,5 @@ export const StyledProccedButton = styled(ButtonBase)( ({ theme }) => ({
     fontStyle: "normal",
     fontWeight: 600,
     lineHeight: "1.875rem",
-    padding: "0.6rem 1.25rem"
+    padding: "0.6rem 1.25rem",
 }))

@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { homeApi } from "./services/home/homeApi";
-import { storageMiddleWare } from "./features/saved-cart-items/savedCartItems"
+import { cartStorageMiddleWare } from "./features/saved-cart-items/savedCartItems"
 import { productsListApi } from "./services/shop-products/shopProductApi";
 import { rootReducer } from "./rootReducer";
+import { invoiceApi } from "./services/invoice/invoiceApi";
+import { authApi } from "./services/auth/authApi";
+import { authStorageMiddleWare } from "./features/auth/auth";
 
 
 
@@ -12,8 +15,8 @@ export const store = configureStore({
   devTools: true,
   middleware: (getDefaultMiddleware) => 
     getDefaultMiddleware()
-    .prepend(storageMiddleWare)
-    .concat( homeApi.middleware, productsListApi.middleware)
+    .prepend(cartStorageMiddleWare, authStorageMiddleWare)
+    .concat( homeApi.middleware, productsListApi.middleware ,invoiceApi.middleware, authApi.middleware)
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

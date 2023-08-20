@@ -96,11 +96,11 @@ export const savedCartItemsSlice = createSlice({
       }
     }, 
   },
-})
+});
 
 //if we call next(action) before getState we get state after dispatch aka new state,
-//  if we use it before we get old state with it
-export const storageMiddleWare: Middleware<(action: Action<'addItem'>) => number, RootState> = 
+//  if we use it after getState we get old state with getState
+export const cartStorageMiddleWare: Middleware<(action: Action<'addItem'>) => number, RootState> = 
   ( { dispatch, getState}) => 
   (next) => 
   (action: 
