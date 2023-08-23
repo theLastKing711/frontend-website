@@ -1,5 +1,5 @@
+import { apiSlice } from '../../../api/apiSlice';
 import { isPriceSearchValid } from './../../../pages/shop-products/shop-products-side-bar/ShopProductsSideBar';
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 
 interface QueryParams {
@@ -19,6 +19,7 @@ export interface CustomerProducts {
     isBestSeller: boolean;
     discount: ResponseDiscount | null;
     averageRating: number;
+    isFavourite?: boolean;
   }
 
   export interface CustomerProductDetails extends CustomerProducts {
@@ -50,19 +51,36 @@ export interface FilterListResponse {
     ratings: productRatingFilterDto[]
 }
 
-export const productsListApi = createApi({
-    reducerPath: "productListApi",
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/customer-product' }),
-    tagTypes: ['CustomerProducts'],
+// export const productsListApi = createApi({
+//     reducerPath: "productListApi",
+//     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/customer-product' }),
+//     tagTypes: ['CustomerProducts'],
+//     endpoints: (build) => ({
+//       getShopProducts: build.query<CustomerProductsResponse, QueryParams | void>({
+//         query: (params) => params ? buildQueryParams(params) : "",
+//       }),
+//       getFilters: build.query<FilterListResponse, void>({
+//         query: () => 'filters',
+//       }),
+//       getProduct: build.query<CustomerProductDetails, string>({
+//         query: (params) => params,
+//       }),
+//     })
+//   });
+
+  const shopProductUrl = 'customer-product'
+
+  export const productsListApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
       getShopProducts: build.query<CustomerProductsResponse, QueryParams | void>({
-        query: (params) => params ? buildQueryParams(params) : "",
+        query: (params) => params ? `${shopProductUrl}/${buildQueryParams(params)}` : `${shopProductUrl}`,
+        providesTags: ['ShopProduct'],
       }),
       getFilters: build.query<FilterListResponse, void>({
-        query: () => 'filters',
+        query: () => `${shopProductUrl}/filters`,
       }),
       getProduct: build.query<CustomerProductDetails, string>({
-        query: (params) => params,
+        query: (params) => `${shopProductUrl}/${params}`,
       }),
     })
   });

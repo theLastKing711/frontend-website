@@ -1,43 +1,12 @@
 import { Grid } from "@mui/material";
-import { LatestProduct } from "../../home.type";
 import LatestProductsItem from "./LatestProductsItem";
-import { LatestProductItemDto } from "src/redux/services/home/homeApi";
+import { LatestProductItemDto } from "../../../../redux/services/home/homeApi";
 import { useCartItems } from "../../../../redux/features/saved-cart-items/hooks/useCartItems";
 import { useDispatch } from "react-redux";
 import { toggleItem } from "../../../../redux/features/saved-cart-items/savedCartItems";
-
-const productList: LatestProduct[] = [
-  {
-    id: 1,
-    discount: 25,
-    imagePath: "test path",
-    price: 42.0,
-  },
-  {
-    id: 2,
-    discount: 55,
-    imagePath: "test path",
-    price: 51.0,
-  },
-  {
-    id: 3,
-    discount: 25,
-    imagePath: "test path",
-    price: 23.0,
-  },
-  {
-    id: 4,
-    discount: 45,
-    imagePath: "test path",
-    price: 66.0,
-  },
-  {
-    id: 5,
-    discount: 34,
-    imagePath: "test path",
-    price: 77.0,
-  },
-];
+import { useToggleFavouriteProductMutation } from "../../../../redux/services/product-favourite/productFavouriteApi";
+import useAuthControlDialog from "../../../../hooks/useAuthControlDialog";
+import LogInSignUpDialog from "../../../../components/ui/log-in-sign-up-dialog/LogInSignUpDialog";
 
 interface Props {
   products: LatestProductItemDto[];
@@ -45,24 +14,47 @@ interface Props {
 
 const LatestProductsList = ({ products }: Props) => {
   const dispatch = useDispatch();
+  const { isOpen, closeDialog, openIfLoggedDialog } = useAuthControlDialog();
 
   const { isItemInCart } = useCartItems();
+  const [toggleFavourite, toggleFavouriteData] =
+    useToggleFavouriteProductMutation();
+
+  const handleItemFavourited = (product: LatestProductItemDto) => {
+    openIfLoggedDialog(() => {
+      void toggleFavourite({
+        productId: product.id,
+      });
+    });
+  };
 
   return (
-    <Grid container spacing={4}>
-      {products.map((product) => (
-        <Grid item xs={12} md={6} lg={4} key={product.id}>
-          <LatestProductsItem
-            product={product}
-            isAddedToCart={isItemInCart(product.id)}
-            handleItemAddedToCart={(item) => {
-              console.log("item", item);
-              dispatch(toggleItem({ ...item, quantity: 1 }));
-            }}
-          />
-        </Grid>
-      ))}
-    </Grid>
+    <>
+      <LogInSignUpDialog
+        open={isOpen}
+        onClose={closeDialog}
+        onSuccess={() => {
+          closeDialog();
+        }}
+      />
+      <Grid container spacing={4}>
+        {products.map((product) => (
+          <Grid item xs={12} md={6} lg={4} key={product.id}>
+            <LatestProductsItem
+              product={product}
+              isAddedToCart={isItemInCart(product.id)}
+              handleItemAddedToCart={(item) => {
+                console.log("item", item);
+                dispatch(toggleItem({ ...item, quantity: 1 }));
+              }}
+              handleItemFavourited={() => {
+                handleItemFavourited(product);
+              }}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    </>
   );
 };
 

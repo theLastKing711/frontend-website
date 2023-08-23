@@ -21,6 +21,8 @@ export const useCartItems = () => {
          return total;
       }
 
-      return { cartProducts, calculateTotal, isItemInCart };
+      const itemsCount = cartProducts.length;
+
+      return { cartProducts, calculateTotal, isItemInCart, itemsCount };
     
 }

@@ -57,7 +57,7 @@ const StyledFavoriteBorderIcon = styled(FavoriteBorderIcon)(({ theme }) => ({
 }));
 
 const StyledFavoriteIcon = styled(FavoriteIcon)(({ theme }) => ({
-  fill: "light blue",
+  fill: "red",
   transition: "fill 0.2s",
 }));
 
@@ -147,12 +147,14 @@ interface Props {
   product: LatestProductItemDto;
   isAddedToCart?: boolean;
   handleItemAddedToCart: (product: LatestProductItemDto) => void;
+  handleItemFavourited: () => void;
 }
 
 const LatestProductsItem = ({
   product,
   isAddedToCart = false,
   handleItemAddedToCart,
+  handleItemFavourited,
 }: Props) => {
   const [isActionBarActive, setIsActionBarActive] = useState(false);
 
@@ -187,7 +189,10 @@ const LatestProductsItem = ({
                 </StyledIconButton>
               </motion.li>
               <motion.li variants={item}>
-                <StyledIconButton isAddedToCart={isAddedToCart}>
+                <StyledIconButton
+                  isAddedToCart={isAddedToCart}
+                  onClick={handleItemFavourited}
+                >
                   {product.isFavourite ? (
                     <StyledFavoriteIcon />
                   ) : (

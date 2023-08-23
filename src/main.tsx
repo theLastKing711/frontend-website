@@ -19,6 +19,8 @@ import Login from "./pages/auth/login/Login.tsx";
 import SignUp from "./pages/auth/sign-up/SignUp.tsx";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.ts";
+import Wishlist from "./pages/wishlist/Wishlist.tsx";
+import ProtectedRoute from "./pages/auth/protected-route/ProtectedRoute.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +30,14 @@ const router = createBrowserRouter(
       <Route path="product/:id" element={<ProductDetails />} />
       <Route path="shopping-cart" element={<ShoppingCart />} />
       <Route path="order-completed" element={<OrderCompleted />} />
+      <Route
+        path="wishlist"
+        element={
+          <ProtectedRoute>
+            <Wishlist />
+          </ProtectedRoute>
+        }
+      />
       <Route path="login" element={<Login />} />
       <Route path="sign-up" element={<SignUp />} />
     </Route>

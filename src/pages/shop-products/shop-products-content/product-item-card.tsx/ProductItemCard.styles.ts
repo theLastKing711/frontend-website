@@ -1,4 +1,5 @@
 import { IconButton, IconButtonProps, Paper, styled } from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 
 export const StyledProductPaper = styled(Paper)(({ theme}) => ({
@@ -79,11 +80,18 @@ export const StyledActionFooter = styled('footer')( ({ theme } ) => ({
     gap: '1.19rem',
 }));
 
+
 export const StyledButtonIcon = styled(IconButton)<IconButtonProps & {isAddedToCart?: boolean}>( ({ theme, isAddedToCart = false } ) => ({
     backgroundColor: 'white',
     '& svg': {
         fill: `${isAddedToCart ? "#2F1AC4" : "light blue"} `,
     }
     
+    
+}));
+
+
+export const StyledFavouriteIcon = styled(FavoriteIcon)( ({ theme } ) => ({
+    fill: "red",
     
 }));

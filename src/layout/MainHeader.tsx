@@ -1,10 +1,11 @@
-import { Box, BoxProps, Container, Link, styled } from "@mui/material";
+import { Badge, Box, BoxProps, Container, Link, styled } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useSelector } from "react-redux";
 
 import { tokenSelector } from "../redux/features/auth/auth";
+import { useCartItems } from "../redux/features/saved-cart-items/hooks/useCartItems";
 
 const baseStyled: BoxProps = {
   fontSize: "1rem",
@@ -20,8 +21,7 @@ const StyledMainHeaderItem = styled(Link)(({ theme }) => ({
 
 const MainHeader = () => {
   const isUserLogged = useSelector(tokenSelector);
-
-  console.log("");
+  const { itemsCount } = useCartItems();
 
   return (
     <Box
@@ -56,14 +56,21 @@ const MainHeader = () => {
                 </StyledMainHeaderItem>
               </Box>
               <Box component="li">
-                <StyledMainHeaderItem display="flex" mr={3} gap="0.3rem">
+                <StyledMainHeaderItem
+                  href="/wishlist"
+                  display="flex"
+                  mr={3}
+                  gap="0.3rem"
+                >
                   <Box>Wishlist</Box>
                   <FavoriteBorderIcon />
                 </StyledMainHeaderItem>
               </Box>
               <Box component="li">
-                <StyledMainHeaderItem>
-                  <ShoppingCartIcon />
+                <StyledMainHeaderItem href="/shopping-cart">
+                  <Badge badgeContent={itemsCount} color="primary">
+                    <ShoppingCartIcon />
+                  </Badge>
                 </StyledMainHeaderItem>
               </Box>
             </Box>

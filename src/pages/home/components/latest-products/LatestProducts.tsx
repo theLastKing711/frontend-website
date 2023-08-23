@@ -42,15 +42,15 @@ const LatestProducts = () => {
     }
 
     if (isNewArrivalTabActive()) {
-      return data.latestProducts;
+      return [...data.latestProducts];
     }
 
     if (isBestSellerTabActive()) {
-      return data.bestSellerProducts;
+      return [...data.bestSellerProducts];
     }
 
     if (isFeaturedTabActive()) {
-      return data.featuredProducts;
+      return [...data.featuredProducts];
     }
   }, [activeTab, data]);
 

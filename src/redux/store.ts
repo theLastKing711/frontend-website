@@ -6,6 +6,7 @@ import { rootReducer } from "./rootReducer";
 import { invoiceApi } from "./services/invoice/invoiceApi";
 import { authApi } from "./services/auth/authApi";
 import { authStorageMiddleWare } from "./features/auth/auth";
+import { productFavouriteApi } from "./services/product-favourite/productFavouriteApi";
 
 
 
@@ -16,7 +17,13 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => 
     getDefaultMiddleware()
     .prepend(cartStorageMiddleWare, authStorageMiddleWare)
-    .concat( homeApi.middleware, productsListApi.middleware ,invoiceApi.middleware, authApi.middleware)
+    .concat( 
+      homeApi.middleware,
+      productsListApi.middleware,
+      invoiceApi.middleware,
+      authApi.middleware,
+      productFavouriteApi.middleware
+    )
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -1,11 +1,13 @@
 import { Rating } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import {
   StyledActionFooter,
   StyledButtonIcon,
   StyledContent,
+  StyledFavouriteIcon,
   StyledProductDescription,
   StyledProductDetails,
   StyledProductDiscount,
@@ -21,12 +23,14 @@ interface Props {
   product: CustomerProducts;
   isProductAdded: boolean;
   handleToggleProduct: () => void;
+  handleFavouriteProduct: () => void;
 }
 
 const ProductItemCard = ({
   product,
   isProductAdded,
   handleToggleProduct,
+  handleFavouriteProduct,
 }: Props) => {
   return (
     <StyledProductPaper>
@@ -56,8 +60,12 @@ const ProductItemCard = ({
             >
               <ShoppingCartOutlinedIcon />
             </StyledButtonIcon>
-            <StyledButtonIcon>
-              <FavoriteBorderOutlinedIcon />
+            <StyledButtonIcon onClick={handleFavouriteProduct}>
+              {product.isFavourite ? (
+                <StyledFavouriteIcon />
+              ) : (
+                <FavoriteBorderOutlinedIcon />
+              )}
             </StyledButtonIcon>
           </StyledActionFooter>
         </StyledProductDetails>

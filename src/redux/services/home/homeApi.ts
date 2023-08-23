@@ -8,6 +8,7 @@ export const homeApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     getHomeData: build.query<HomeResponseDto, void>({
       query: () => `${homeUrl}`,
+      providesTags: ["Home"],
     }),
   }),
   overrideExisting: false
