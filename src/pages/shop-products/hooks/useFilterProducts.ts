@@ -14,9 +14,23 @@ export const useFilterProducts = () => {
 
     const searchFilter = searchParams.get('search') || "";
 
+    const idFilter = searchParams.get('id') || "";
+
     const categoriesFilter = searchParams.getAll('categoryIds');
 
     console.log("categoriesFilter", categoriesFilter);
+    
+    const setIdCursor = (id: number) => {
+
+        setSerchParams(prev => {
+
+            prev.set('id', id.toString());
+            
+            return prev;
+            
+        });
+        
+    }
 
     const toggleCategoryFilterItem = (categoryId: string) => {
         
@@ -31,7 +45,6 @@ export const useFilterProducts = () => {
                 prev.set('categoryIds', categoryId);
             }
             else {
-                
                 
                 const isItemAlreadyInList = categoriesFilter.find(id => categoryId === id);
                 
@@ -128,7 +141,6 @@ export const useFilterProducts = () => {
 
     const togglePriceTextFilterItem = (prices: string) => {
         
-        
         setSerchParams(prev => {
             
             if ( prices ) {
@@ -152,12 +164,14 @@ export const useFilterProducts = () => {
         categoriesFilter,
         ratingFilter,
         searchFilter,
+        idFilter,
         toggleCategoryFilterItem,
         toggleSortFilterItem,
         togglePerPageFilterItem,
         togglePriceFilterItem,
         toggleRatingFilterItem,
         togglePriceTextFilterItem,
+        setIdCursor
     }
 
 }

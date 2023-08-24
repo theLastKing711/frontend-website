@@ -18,6 +18,7 @@ import { toggleItem } from "../../redux/features/saved-cart-items/savedCartItems
 import useAuthControlDialog from "../../hooks/useAuthControlDialog";
 import { useToggleFavouriteProductMutation } from "../../redux/services/product-favourite/productFavouriteApi";
 import LogInSignUpDialog from "../../components/ui/log-in-sign-up-dialog/LogInSignUpDialog";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const ShopProducts = () => {
   const [toggleFavouriteProduct, toggleFavouriteProductData] =
@@ -32,6 +33,8 @@ const ShopProducts = () => {
     searchFilter,
     categoriesFilter,
     sortFilter,
+    idFilter,
+    setIdCursor,
   } = useFilterProducts();
 
   const { data, isLoading } = useGetShopProductsQuery({
@@ -41,6 +44,7 @@ const ShopProducts = () => {
     search: searchFilter,
     categoryIds: categoriesFilter,
     sort: sortFilter,
+    id: idFilter,
   });
 
   const { isItemInCart } = useCartItems();
@@ -60,6 +64,17 @@ const ShopProducts = () => {
     );
   };
 
+  const handleNextData = () => {
+    if (data && data.hasNextPage) {
+      const lastItemIndex = data.data.length - 1;
+      const nextCursor = data.data[lastItemIndex];
+
+      setIdCursor(nextCursor.id);
+    }
+
+    return;
+  };
+
   return (
     <>
       <LogInSignUpDialog
@@ -74,25 +89,54 @@ const ShopProducts = () => {
         <StyledMainLayout>
           <ShopProductsSideBar />
           {data && (
-            <ShopProductsContent>
-              <ProductList>
-                {data.data.map((product) => (
-                  <ProductItemCard
-                    key={product.id}
-                    product={product}
-                    isProductAdded={isItemInCart(product.id)}
-                    handleToggleProduct={() =>
-                      handleProductCartToggled(product)
-                    }
-                    handleFavouriteProduct={() => {
-                      openIfLoggedDialog(() => {
-                        void toggleFavouriteProduct({ productId: product.id });
-                      });
-                    }}
-                  />
-                ))}
-              </ProductList>
-            </ShopProductsContent>
+            <InfiniteScroll
+              hasChildren={false}
+              dataLength={data.total} //This is important field to render the next data
+              next={handleNextData}
+              hasMore={true}
+              loader={<h4>Loading...</h4>}
+              endMessage={
+                <p style={{ textAlign: "center" }}>
+                  <b>Yay! You have seen it all</b>
+                </p>
+              }
+              // below props only if you need pull down functionality
+              refreshFunction={handleNextData}
+              pullDownToRefresh
+              pullDownToRefreshThreshold={50}
+              pullDownToRefreshContent={
+                <h3 style={{ textAlign: "center" }}>
+                  &#8595; Pull down to refresh
+                </h3>
+              }
+              releaseToRefreshContent={
+                <h3 style={{ textAlign: "center" }}>
+                  &#8593; Release to refresh
+                </h3>
+              }
+            >
+              <ShopProductsContent>
+                <ProductList>
+                  {data.data.map((product) => (
+                    <ProductItemCard
+                      key={product.id}
+                      product={product}
+                      isProductAdded={isItemInCart(product.id)}
+                      handleToggleProduct={() =>
+                        handleProductCartToggled(product)
+                      }
+                      handleFavouriteProduct={() => {
+                        openIfLoggedDialog(() => {
+                          void toggleFavouriteProduct({
+                            productId: product.id,
+                          });
+                        });
+                      }}
+                    />
+                  ))}
+                </ProductList>
+              </ShopProductsContent>
+            </InfiniteScroll>
           )}
         </StyledMainLayout>
       </Container>

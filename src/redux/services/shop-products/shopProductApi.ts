@@ -9,6 +9,7 @@ interface QueryParams {
   rating?: string;
   prices?: string;
   search?: string;
+  id?: string;
 }
 
 export interface CustomerProducts {
@@ -34,6 +35,7 @@ export interface CustomerProducts {
   interface CustomerProductsResponse {
     data: CustomerProducts[],
     total: number,
+    hasNextPage: boolean,
   }
 
 export interface CustomerCategory {
@@ -68,7 +70,7 @@ export interface FilterListResponse {
 //     })
 //   });
 
-  const shopProductUrl = 'customer-product'
+  const shopProductUrl = 'customer-product';
 
   export const productsListApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
@@ -147,6 +149,9 @@ export interface FilterListResponse {
         if(isPriceSearchValid(params.prices)) {
           buildQueryItem('prices', params.prices);
         }
+    }
+    if(params.id) {
+      buildQueryItem('id', params.id);
     }
     // if(params.search) {
         
