@@ -70,13 +70,26 @@ export interface FilterListResponse {
 //     })
 //   });
 
+  export interface getShopProductsArgs extends QueryParams {
+    oldData?: CustomerProducts[];
+  }
+
   const shopProductUrl = 'customer-product';
 
   export const productsListApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
-      getShopProducts: build.query<CustomerProductsResponse, QueryParams | void>({
+      getShopProducts: build.query<CustomerProductsResponse, getShopProductsArgs | void>({
         query: (params) => params ? `${shopProductUrl}/${buildQueryParams(params)}` : `${shopProductUrl}`,
         providesTags: ['ShopProduct'],
+        // transformResponse: (res: CustomerProductsResponse, meta, arg) => {
+
+
+        //   console.log('res', res);
+        //   console.log('meta', meta)
+        //   console.log('arg', arg);
+          
+        //   return res;
+        // }
       }),
       getFilters: build.query<FilterListResponse, void>({
         query: () => `${shopProductUrl}/filters`,

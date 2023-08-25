@@ -6,6 +6,7 @@ import { StyledMainLayout } from "./ShopProducts.styles";
 import ShopProductsContent from "./shop-products-content/ShopProductsContent";
 import ProductList from "./shop-products-content/product-list/ProductList";
 import ProductItemCard from "./shop-products-content/product-item-card.tsx/ProductItemCard";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 import {
   CustomerProducts,
@@ -18,9 +19,15 @@ import { toggleItem } from "../../redux/features/saved-cart-items/savedCartItems
 import useAuthControlDialog from "../../hooks/useAuthControlDialog";
 import { useToggleFavouriteProductMutation } from "../../redux/services/product-favourite/productFavouriteApi";
 import LogInSignUpDialog from "../../components/ui/log-in-sign-up-dialog/LogInSignUpDialog";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { useEffect, useState } from "react";
 
 const ShopProducts = () => {
+  const [cursorId, setCursorId] = useState<undefined | number>();
+  const dispatch = useDispatch();
+  const [accumlatedProducts, setAccumlatedProducts] = useState<
+    CustomerProducts[]
+  >([]);
+
   const [toggleFavouriteProduct, toggleFavouriteProductData] =
     useToggleFavouriteProductMutation();
 
@@ -33,8 +40,6 @@ const ShopProducts = () => {
     searchFilter,
     categoriesFilter,
     sortFilter,
-    idFilter,
-    setIdCursor,
   } = useFilterProducts();
 
   const { data, isLoading } = useGetShopProductsQuery({
@@ -44,12 +49,10 @@ const ShopProducts = () => {
     search: searchFilter,
     categoryIds: categoriesFilter,
     sort: sortFilter,
-    id: idFilter,
+    id: cursorId?.toString(),
   });
 
   const { isItemInCart } = useCartItems();
-
-  const dispatch = useDispatch();
 
   const handleProductCartToggled = (product: CustomerProducts) => {
     dispatch(
@@ -64,16 +67,41 @@ const ShopProducts = () => {
     );
   };
 
+  const resetCursorId = () => {
+    setCursorId(undefined);
+  };
+
   const handleNextData = () => {
     if (data && data.hasNextPage) {
       const lastItemIndex = data.data.length - 1;
-      const nextCursor = data.data[lastItemIndex];
+      if (lastItemIndex) {
+        const nextCursor = data.data[lastItemIndex];
 
-      setIdCursor(nextCursor.id);
+        setCursorId(nextCursor.id);
+      }
     }
 
     return;
   };
+
+  useEffect(() => {
+    setAccumlatedProducts([]);
+  }, [
+    perPageFilter,
+    categoriesFilter,
+    pricesFilter,
+    ratingFilter,
+    searchFilter,
+    sortFilter,
+  ]);
+
+  useEffect(() => {
+    if (data && data.data) {
+      console.log("old data", accumlatedProducts);
+      console.log("new data", data.data);
+      setAccumlatedProducts((prev) => [...prev, ...data.data]);
+    }
+  }, [data]);
 
   return (
     <>
@@ -87,37 +115,40 @@ const ShopProducts = () => {
       <ShopProductsFilter />
       <Container>
         <StyledMainLayout>
-          <ShopProductsSideBar />
-          {data && (
+          <ShopProductsSideBar resetCursorId={resetCursorId} />
+
+          {data && accumlatedProducts && accumlatedProducts.length > 0 && (
             <InfiniteScroll
-              hasChildren={false}
-              dataLength={data.total} //This is important field to render the next data
+              // hasChildren={false}
+              dataLength={accumlatedProducts.length} //This is important field to render the next data
               next={handleNextData}
-              hasMore={true}
+              hasMore={data.hasNextPage}
               loader={<h4>Loading...</h4>}
               endMessage={
-                <p style={{ textAlign: "center" }}>
-                  <b>Yay! You have seen it all</b>
+                <p style={{ textAlign: "center", marginBottom: "1rem" }}>
+                  <b>End of products</b>
                 </p>
               }
               // below props only if you need pull down functionality
-              refreshFunction={handleNextData}
-              pullDownToRefresh
-              pullDownToRefreshThreshold={50}
-              pullDownToRefreshContent={
-                <h3 style={{ textAlign: "center" }}>
-                  &#8595; Pull down to refresh
-                </h3>
-              }
-              releaseToRefreshContent={
-                <h3 style={{ textAlign: "center" }}>
-                  &#8593; Release to refresh
-                </h3>
-              }
+              refreshFunction={() => {
+                console.log("refetching");
+              }}
+              // pullDownToRefresh
+              // pullDownToRefreshThreshold={50}
+              // pullDownToRefreshContent={
+              //   <h3 style={{ textAlign: "center" }}>
+              //     &#8595; Pull down to refresh
+              //   </h3>
+              // }
+              // releaseToRefreshContent={
+              //   <h3 style={{ textAlign: "center" }}>
+              //     &#8593; Release to refresh
+              //   </h3>
+              // }
             >
               <ShopProductsContent>
                 <ProductList>
-                  {data.data.map((product) => (
+                  {accumlatedProducts.map((product) => (
                     <ProductItemCard
                       key={product.id}
                       product={product}

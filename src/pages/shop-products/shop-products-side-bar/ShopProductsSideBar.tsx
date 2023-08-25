@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   useGetFiltersQuery,
   useGetShopProductsQuery,
@@ -46,7 +47,12 @@ export const isPriceSearchValid = (value: string) => {
   return reg.test(value);
 };
 
-const ShopProductsSideBar = () => {
+interface Props {
+  resetCursorId: () => void;
+}
+
+const ShopProductsSideBar = ({ resetCursorId }: Props) => {
+  const [priceText, setPriceText] = useState("");
   const { data, isLoading } = useGetFiltersQuery();
 
   const {
@@ -108,6 +114,7 @@ const ShopProductsSideBar = () => {
                   }
                   checked={rating.starsNumber == +ratingFilter}
                   onClick={() => {
+                    resetCursorId();
                     return toggleRatingFilterItem(
                       rating.starsNumber.toString()
                     );
@@ -136,9 +143,10 @@ const ShopProductsSideBar = () => {
                   checkedIcon={
                     <UilUnCheckedBox backgroundFill="#FB2E86" fill="white" />
                   }
-                  onClick={() =>
-                    toggleCategoryFilterItem(category.id.toString())
-                  }
+                  onClick={() => {
+                    resetCursorId();
+                    toggleCategoryFilterItem(category.id.toString());
+                  }}
                   checked={categoriesFilter.includes(category.id.toString())}
                 />
                 <StyledLabel htmlFor={`category-filter-${category.id}`}>
@@ -175,6 +183,9 @@ const ShopProductsSideBar = () => {
           value={pricesFilter}
           error={!isPriceSearchValid(pricesFilter) && pricesFilter}
           onChange={(e) => {
+            if (isPriceSearchValid(pricesFilter) && pricesFilter) {
+            }
+            resetCursorId();
             togglePriceTextFilterItem(e.target.value);
           }}
         />

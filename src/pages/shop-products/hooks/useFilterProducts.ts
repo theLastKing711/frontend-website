@@ -1,8 +1,9 @@
+import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom"
 
 export const useFilterProducts = () => {
 
-    const [searchParams, setSerchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const perPageFilter = searchParams.get('perPage') || "";
 
@@ -14,27 +15,17 @@ export const useFilterProducts = () => {
 
     const searchFilter = searchParams.get('search') || "";
 
-    const idFilter = searchParams.get('id') || "";
+    const categoriesFilter = useMemo(() => {
+        return searchParams.getAll('categoryIds')
+    }, [searchParams.getAll('categoryIds').length]) 
 
-    const categoriesFilter = searchParams.getAll('categoryIds');
+    console.log('categories filter', categoriesFilter)
 
     console.log("categoriesFilter", categoriesFilter);
     
-    const setIdCursor = (id: number) => {
-
-        setSerchParams(prev => {
-
-            prev.set('id', id.toString());
-            
-            return prev;
-            
-        });
-        
-    }
 
     const toggleCategoryFilterItem = (categoryId: string) => {
-        
-        setSerchParams(prev => {
+        setSearchParams(prev => {
 
             const categoriesFilter = prev.getAll('categoryIds') || [];
 
@@ -68,7 +59,7 @@ export const useFilterProducts = () => {
 
     const togglePerPageFilterItem = (perPage: string) => {
 
-        setSerchParams(prev => {
+        setSearchParams(prev => {
             
             if ( perPage ) {
                 prev.set('perPage', perPage);
@@ -86,7 +77,7 @@ export const useFilterProducts = () => {
 
     const toggleSortFilterItem = (sort: string) => {
 
-        setSerchParams(prev => {
+        setSearchParams(prev => {
             
             if ( !sort ) {
                 prev.delete('sort')
@@ -102,10 +93,9 @@ export const useFilterProducts = () => {
     }
   
     const toggleRatingFilterItem = (starsNumber: string) => {
+        setSearchParams(prev => {
 
-        setSerchParams(prev => {
-
-            const ratingFilter = prev.get('rating')
+            const ratingFilter = prev.get('rating');
             
             if ( !ratingFilter || (ratingFilter &&  starsNumber !== ratingFilter)) {
                 prev.set('rating', starsNumber);
@@ -114,7 +104,7 @@ export const useFilterProducts = () => {
                 prev.delete('rating')
             }
             
-            return prev
+            return prev;
             
         })
         
@@ -122,7 +112,7 @@ export const useFilterProducts = () => {
 
     const togglePriceFilterItem = (prices: string) => {
 
-        setSerchParams(prev => {
+        setSearchParams(prev => {
 
             const pricesFilter = prev.get('prices')
             
@@ -141,7 +131,7 @@ export const useFilterProducts = () => {
 
     const togglePriceTextFilterItem = (prices: string) => {
         
-        setSerchParams(prev => {
+        setSearchParams(prev => {
             
             if ( prices ) {
                 prev.set('prices', prices);
@@ -164,14 +154,12 @@ export const useFilterProducts = () => {
         categoriesFilter,
         ratingFilter,
         searchFilter,
-        idFilter,
         toggleCategoryFilterItem,
         toggleSortFilterItem,
         togglePerPageFilterItem,
         togglePriceFilterItem,
         toggleRatingFilterItem,
         togglePriceTextFilterItem,
-        setIdCursor
     }
 
 }
