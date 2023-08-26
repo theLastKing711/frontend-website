@@ -170,7 +170,10 @@ const ShopProductsSideBar = ({ resetCursorId }: Props) => {
                 }
                 value={pricesFilter}
                 checked={item.range == pricesFilter}
-                onChange={() => togglePriceFilterItem(item.range)}
+                onChange={() => {
+                  resetCursorId();
+                  togglePriceFilterItem(item.range);
+                }}
               />
               <StyledPriceFilterLabel htmlFor={`price-filter-${item.id}`}>
                 {item.range}
@@ -180,13 +183,14 @@ const ShopProductsSideBar = ({ resetCursorId }: Props) => {
         </StyledList>
         <PriceFilterInput
           placeholder="$10.00 - 20000$"
-          value={pricesFilter}
-          error={!isPriceSearchValid(pricesFilter) && pricesFilter}
+          value={priceText}
+          error={!isPriceSearchValid(priceText) && priceText}
           onChange={(e) => {
-            if (isPriceSearchValid(pricesFilter) && pricesFilter) {
+            if (isPriceSearchValid(priceText) && priceText) {
+              resetCursorId();
+              togglePriceTextFilterItem(e.target.value);
             }
-            resetCursorId();
-            togglePriceTextFilterItem(e.target.value);
+            setPriceText(e.target.value);
           }}
         />
       </StyledFilterSection>

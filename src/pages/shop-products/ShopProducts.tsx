@@ -96,8 +96,8 @@ const ShopProducts = () => {
   ]);
 
   useEffect(() => {
+    console.log("old data", accumlatedProducts);
     if (data && data.data) {
-      console.log("old data", accumlatedProducts);
       console.log("new data", data.data);
       setAccumlatedProducts((prev) => [...prev, ...data.data]);
     }
@@ -131,6 +131,7 @@ const ShopProducts = () => {
               }
               // below props only if you need pull down functionality
               refreshFunction={() => {
+                alert("refreshing");
                 console.log("refetching");
               }}
               // pullDownToRefresh

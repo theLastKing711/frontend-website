@@ -15,7 +15,8 @@ export const StyledContent = styled('div')(({ theme}) => ({
 
 
 export const StyledProductImage = styled('img')( ({ theme } ) => ({
-    flex: '0 0 17.7rem',
+    flex: '0 0 25rem',
+    maxWidth: '25rem',
     height: '12.3rem',
 }));
 
