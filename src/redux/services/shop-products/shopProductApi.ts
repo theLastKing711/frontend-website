@@ -21,6 +21,7 @@ export interface CustomerProducts {
     discount: ResponseDiscount | null;
     averageRating: number;
     isFavourite?: boolean;
+    cursorId?: string,
   }
 
   export interface CustomerProductDetails extends CustomerProducts {
@@ -36,6 +37,7 @@ export interface CustomerProducts {
     data: CustomerProducts[],
     total: number,
     hasNextPage: boolean,
+    cursorId?: string,
   }
 
 export interface CustomerCategory {
@@ -80,16 +82,29 @@ export interface FilterListResponse {
     endpoints: (build) => ({
       getShopProducts: build.query<CustomerProductsResponse, getShopProductsArgs | void>({
         query: (params) => params ? `${shopProductUrl}/${buildQueryParams(params)}` : `${shopProductUrl}`,
-        providesTags: ['ShopProduct'],
-        // transformResponse: (res: CustomerProductsResponse, meta, arg) => {
+        // providesTags: ['ShopProduct'],
+        providesTags: (result, error, arg) =>
+        {
+          return [{type: 'ShopProduct', id: result?.data[0].cursorId}]
+        },
+        transformResponse: (res: CustomerProductsResponse, meta, arg) => {
 
+          if (res && res.data) {
+            const lastItemIndex = res.data.length - 1;
+            if (lastItemIndex) {
+              console.log('result' ,res);
+              const { id } = res.data[lastItemIndex];
+              console.log("cursor id", id)
+              const result = {...res, data: res.data.map(x => ({...x, cursorId: id.toString() }))}
+              console.log('result 2', result);
+              return {...res, data: res.data.map(x => ({...x, cursorId: id.toString() }))}
 
-        //   console.log('res', res);
-        //   console.log('meta', meta)
-        //   console.log('arg', arg);
+            }
+          }
           
-        //   return res;
-        // }
+          return {...res, cursorId: undefined}
+
+        }
       }),
       getFilters: build.query<FilterListResponse, void>({
         query: () => `${shopProductUrl}/filters`,

@@ -42,7 +42,7 @@ const ShopProducts = () => {
     sortFilter,
   } = useFilterProducts();
 
-  const { data, isLoading } = useGetShopProductsQuery({
+  const { data, isLoading, refetch, currentData } = useGetShopProductsQuery({
     perPage: perPageFilter,
     rating: ratingFilter,
     prices: pricesFilter,
@@ -51,6 +51,10 @@ const ShopProducts = () => {
     sort: sortFilter,
     id: cursorId?.toString(),
   });
+
+  console.log("datas", data);
+
+  console.log("current data", currentData);
 
   const { isItemInCart } = useCartItems();
 
@@ -96,10 +100,23 @@ const ShopProducts = () => {
   ]);
 
   useEffect(() => {
+    const duplicatedCursorIndex = () => {
+      const res = accumlatedProducts.findIndex(
+        (x) => x.cursorId === data?.data[0].cursorId
+      );
+      return res;
+    };
+
     console.log("old data", accumlatedProducts);
-    if (data && data.data) {
+    if (data && data.data && data.data.length > 0) {
       console.log("new data", data.data);
-      setAccumlatedProducts((prev) => [...prev, ...data.data]);
+      const duplicatedCursorStartIndex = duplicatedCursorIndex();
+      if (duplicatedCursorStartIndex != -1) {
+        accumlatedProducts.splice(duplicatedCursorStartIndex, 3, ...data.data);
+        setAccumlatedProducts([...accumlatedProducts]);
+      } else {
+        setAccumlatedProducts((prev) => [...prev, ...data.data]);
+      }
     }
   }, [data]);
 
@@ -129,11 +146,11 @@ const ShopProducts = () => {
                   <b>End of products</b>
                 </p>
               }
-              // below props only if you need pull down functionality
-              refreshFunction={() => {
-                alert("refreshing");
-                console.log("refetching");
-              }}
+              // // below props only if you need pull down functionality
+              // refreshFunction={() => {
+              //   alert("refreshing");
+              //   console.log("refetching");
+              // }}
               // pullDownToRefresh
               // pullDownToRefreshThreshold={50}
               // pullDownToRefreshContent={
@@ -159,8 +176,10 @@ const ShopProducts = () => {
                       }
                       handleFavouriteProduct={() => {
                         openIfLoggedDialog(() => {
+                          // setAccumlatedProducts([]);
                           void toggleFavouriteProduct({
                             productId: product.id,
+                            cursorId: product.cursorId,
                           });
                         });
                       }}

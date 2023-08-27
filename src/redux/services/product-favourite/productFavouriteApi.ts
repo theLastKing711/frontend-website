@@ -11,7 +11,11 @@ export const productFavouriteApi = apiSlice.injectEndpoints({
                 body: body,
                 method: 'POST'
             }),
-            invalidatesTags: ['Home', 'WishList', 'ShopProduct'],
+            invalidatesTags: (result, error, arg) => {
+                const invalidatedCursor =  arg && arg.cursorId ? arg.cursorId : undefined 
+                console.log("args", invalidatedCursor);
+                return ['Home', 'WishList', {type: 'ShopProduct', id: invalidatedCursor}]
+            }
         }),
         wishList: build.query<WishListResponseDto[], void>({
             query: () => `${prodcutFavouriteUrl}`,
@@ -29,7 +33,8 @@ export const productFavouriteApi = apiSlice.injectEndpoints({
 // }
 
 interface favouriteProductRequest {
-    productId: number
+    productId: number,
+    cursorId?: string,
 }
 
 export interface WishListResponseDto {
