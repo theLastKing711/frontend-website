@@ -20,6 +20,7 @@ import useAuthControlDialog from "../../hooks/useAuthControlDialog";
 import { useToggleFavouriteProductMutation } from "../../redux/services/product-favourite/productFavouriteApi";
 import LogInSignUpDialog from "../../components/ui/log-in-sign-up-dialog/LogInSignUpDialog";
 import { useEffect, useState } from "react";
+import TestComponent from "./TestComponent";
 
 const ShopProducts = () => {
   const [cursorId, setCursorId] = useState<undefined | number>();
@@ -53,8 +54,6 @@ const ShopProducts = () => {
   });
 
   console.log("datas", data);
-
-  console.log("current data", currentData);
 
   const { isItemInCart } = useCartItems();
 
@@ -99,6 +98,8 @@ const ShopProducts = () => {
     sortFilter,
   ]);
 
+  console.log("datas", data?.data);
+
   useEffect(() => {
     const duplicatedCursorIndex = () => {
       const res = accumlatedProducts.findIndex(
@@ -108,8 +109,13 @@ const ShopProducts = () => {
     };
 
     console.log("old data", accumlatedProducts);
-    if (data && data.data && data.data.length > 0) {
-      console.log("new data", data.data);
+    if (data && data.data) {
+      if (data.data.length === 0) {
+        setAccumlatedProducts([]);
+        return;
+      }
+
+      console.log("new data", data.data[0]);
       const duplicatedCursorStartIndex = duplicatedCursorIndex();
       if (duplicatedCursorStartIndex != -1) {
         accumlatedProducts.splice(duplicatedCursorStartIndex, 3, ...data.data);
@@ -129,6 +135,7 @@ const ShopProducts = () => {
           closeDialog();
         }}
       />
+      <TestComponent />
       <ShopProductsFilter />
       <Container>
         <StyledMainLayout>
@@ -177,9 +184,29 @@ const ShopProducts = () => {
                       handleFavouriteProduct={() => {
                         openIfLoggedDialog(() => {
                           // setAccumlatedProducts([]);
+                          const productIndex = accumlatedProducts.findIndex(
+                            (x) => x.id === product.id
+                          );
+                          const previousCursor =
+                            accumlatedProducts[productIndex - 3];
+                          const newCursor = previousCursor
+                            ? previousCursor.cursorId
+                            : undefined;
+                          // alert(newCursor);
+                          setCursorId(newCursor ? +newCursor : undefined);
                           void toggleFavouriteProduct({
                             productId: product.id,
                             cursorId: product.cursorId,
+                          }).then((x) => {
+                            // alert("asdlkj");s
+                            const lastIndex = accumlatedProducts.length - 1;
+                            const lastItem = accumlatedProducts[lastIndex - 3];
+                            const lastCursor =
+                              lastItem && lastItem.cursorId
+                                ? +lastItem.cursorId
+                                : undefined;
+                            // alert(lastCursor);
+                            setCursorId(lastCursor);
                           });
                         });
                       }}
