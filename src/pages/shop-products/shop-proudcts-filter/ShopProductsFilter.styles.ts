@@ -1,10 +1,13 @@
 import { Input, InputBase, NativeSelect, Select, styled } from "@mui/material";
 
 export const StyledSection = styled('div')(({ theme }) => ({
-    margin: '7.87rem 0 6.25rem',
+    margin: '2.5rem 0',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    '@media screen and (max-width: 1000px)': {
+        flexDirection: 'column',
+    }
 }));
 
 export const StyledHeading = styled('h2')(({ theme } ) => ({
@@ -22,7 +25,10 @@ export const StyledResult = styled('p')(({ theme }) => ({
     fontSize: "0.75rem",
     fontStyle: "normal",
     fontWeight: 400,
-    lineHeight: "normal"
+    lineHeight: "normal",
+    '@media screen and (max-width: 1000px)': {
+        marginBottom: "1rem",
+    }
 }));
 
 export const StyledActionsContainer = styled('div')(({ theme }) => ({

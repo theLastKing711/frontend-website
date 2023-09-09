@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Container, useMediaQuery } from "@mui/material";
 
 import ShopProductsSideBar from "./shop-products-side-bar/ShopProductsSideBar";
 import ShopProductsFilter from "./shop-proudcts-filter/ShopProductsFilter";
@@ -23,6 +23,7 @@ import { useEffect, useState } from "react";
 import TestComponent from "./TestComponent";
 
 const ShopProducts = () => {
+  const shouldShowSideBar = useMediaQuery("(min-width:1000px)");
   const [cursorId, setCursorId] = useState<undefined | number>();
   const dispatch = useDispatch();
   const [accumlatedProducts, setAccumlatedProducts] = useState<
@@ -130,8 +131,9 @@ const ShopProducts = () => {
       <ShopProductsFilter onFilterChange={resetCursorId} />
       <Container>
         <StyledMainLayout>
-          <ShopProductsSideBar resetCursorId={resetCursorId} />
-
+          {shouldShowSideBar && (
+            <ShopProductsSideBar resetCursorId={resetCursorId} />
+          )}
           {data && accumlatedProducts && accumlatedProducts.length > 0 && (
             <InfiniteScroll
               dataLength={accumlatedProducts.length} //This is important field to render the next data its value is the length of the displayed array

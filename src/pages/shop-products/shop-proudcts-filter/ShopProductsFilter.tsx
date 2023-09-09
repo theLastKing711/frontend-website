@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, useMediaQuery } from "@mui/material";
 
 import {
   StyledSection,
@@ -41,8 +41,6 @@ const ShopProductsFilter = ({ onFilterChange }: Props) => {
   } = useFilterProducts();
 
   const { data, isLoading } = useGetShopProductsQuery();
-
-  console.log("per page filter", perPageFilter);
 
   return (
     <Box>
