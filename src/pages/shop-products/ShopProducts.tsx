@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Container } from "@mui/material";
 
 import ShopProductsSideBar from "./shop-products-side-bar/ShopProductsSideBar";
 import ShopProductsFilter from "./shop-proudcts-filter/ShopProductsFilter";
@@ -43,17 +43,16 @@ const ShopProducts = () => {
     sortFilter,
   } = useFilterProducts();
 
-  const { data, isLoading, refetch, currentData } = useGetShopProductsQuery({
-    perPage: perPageFilter,
-    rating: ratingFilter,
-    prices: pricesFilter,
-    search: searchFilter,
-    categoryIds: categoriesFilter,
-    sort: sortFilter,
-    id: cursorId?.toString(),
-  });
-
-  console.log("datas", data);
+  const { data, isLoading, isFetching, refetch, currentData } =
+    useGetShopProductsQuery({
+      perPage: perPageFilter,
+      rating: ratingFilter,
+      prices: pricesFilter,
+      search: searchFilter,
+      categoryIds: categoriesFilter,
+      sort: sortFilter,
+      id: cursorId?.toString(),
+    });
 
   const { isItemInCart } = useCartItems();
 
@@ -72,13 +71,15 @@ const ShopProducts = () => {
 
   const resetCursorId = () => {
     setCursorId(undefined);
+    setAccumlatedProducts([]);
   };
 
   const handleNextData = () => {
     if (data && data.hasNextPage) {
-      const lastItemIndex = data.data.length - 1;
+      const lastItemIndex = accumlatedProducts.length - 1;
+
       if (lastItemIndex) {
-        const nextCursor = data.data[lastItemIndex];
+        const nextCursor = accumlatedProducts[lastItemIndex];
 
         setCursorId(nextCursor.id);
       }
@@ -88,19 +89,6 @@ const ShopProducts = () => {
   };
 
   useEffect(() => {
-    setAccumlatedProducts([]);
-  }, [
-    perPageFilter,
-    categoriesFilter,
-    pricesFilter,
-    ratingFilter,
-    searchFilter,
-    sortFilter,
-  ]);
-
-  console.log("datas", data?.data);
-
-  useEffect(() => {
     const duplicatedCursorIndex = () => {
       const res = accumlatedProducts.findIndex(
         (x) => x.cursorId === data?.data[0].cursorId
@@ -108,23 +96,26 @@ const ShopProducts = () => {
       return res;
     };
 
-    console.log("old data", accumlatedProducts);
-    if (data && data.data) {
+    if (data?.data) {
       if (data.data.length === 0) {
-        setAccumlatedProducts([]);
         return;
       }
 
-      console.log("new data", data.data[0]);
       const duplicatedCursorStartIndex = duplicatedCursorIndex();
       if (duplicatedCursorStartIndex != -1) {
-        accumlatedProducts.splice(duplicatedCursorStartIndex, 3, ...data.data);
+        accumlatedProducts.splice(
+          duplicatedCursorStartIndex,
+          +perPageFilter,
+          ...data.data
+        );
         setAccumlatedProducts([...accumlatedProducts]);
       } else {
         setAccumlatedProducts((prev) => [...prev, ...data.data]);
       }
     }
   }, [data]);
+
+  const shouldShowLoader = isLoading || isFetching;
 
   return (
     <>
@@ -135,41 +126,25 @@ const ShopProducts = () => {
           closeDialog();
         }}
       />
-      <TestComponent />
-      <ShopProductsFilter />
+      {/* <TestComponent /> */}
+      <ShopProductsFilter onFilterChange={resetCursorId} />
       <Container>
         <StyledMainLayout>
           <ShopProductsSideBar resetCursorId={resetCursorId} />
 
           {data && accumlatedProducts && accumlatedProducts.length > 0 && (
             <InfiniteScroll
-              // hasChildren={false}
-              dataLength={accumlatedProducts.length} //This is important field to render the next data
+              dataLength={accumlatedProducts.length} //This is important field to render the next data its value is the length of the displayed array
               next={handleNextData}
               hasMore={data.hasNextPage}
-              loader={<h4>Loading...</h4>}
+              loader={shouldShowLoader && <h4>Loading...</h4>}
               endMessage={
-                <p style={{ textAlign: "center", marginBottom: "1rem" }}>
-                  <b>End of products</b>
-                </p>
+                !data.hasNextPage && (
+                  <p style={{ textAlign: "center", marginBottom: "1rem" }}>
+                    <b>End of products</b>
+                  </p>
+                )
               }
-              // // below props only if you need pull down functionality
-              // refreshFunction={() => {
-              //   alert("refreshing");
-              //   console.log("refetching");
-              // }}
-              // pullDownToRefresh
-              // pullDownToRefreshThreshold={50}
-              // pullDownToRefreshContent={
-              //   <h3 style={{ textAlign: "center" }}>
-              //     &#8595; Pull down to refresh
-              //   </h3>
-              // }
-              // releaseToRefreshContent={
-              //   <h3 style={{ textAlign: "center" }}>
-              //     &#8593; Release to refresh
-              //   </h3>
-              // }
             >
               <ShopProductsContent>
                 <ProductList>
@@ -188,7 +163,7 @@ const ShopProducts = () => {
                             (x) => x.id === product.id
                           );
                           const previousCursor =
-                            accumlatedProducts[productIndex - 3];
+                            accumlatedProducts[productIndex - +perPageFilter];
                           const newCursor = previousCursor
                             ? previousCursor.cursorId
                             : undefined;
@@ -197,16 +172,6 @@ const ShopProducts = () => {
                           void toggleFavouriteProduct({
                             productId: product.id,
                             cursorId: product.cursorId,
-                          }).then((x) => {
-                            // alert("asdlkj");s
-                            const lastIndex = accumlatedProducts.length - 1;
-                            const lastItem = accumlatedProducts[lastIndex - 3];
-                            const lastCursor =
-                              lastItem && lastItem.cursorId
-                                ? +lastItem.cursorId
-                                : undefined;
-                            // alert(lastCursor);
-                            setCursorId(lastCursor);
                           });
                         });
                       }}

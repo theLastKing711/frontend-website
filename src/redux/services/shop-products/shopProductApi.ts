@@ -85,13 +85,23 @@ export interface FilterListResponse {
         // providesTags: ['ShopProduct'],
         providesTags: (result, error, arg) =>
         {
-          return [{type: 'ShopProduct', id: result?.data[0].cursorId}]
+          const cursorId = result?.data && result.data.length > 0 ? result?.data[0].cursorId : undefined; 
+          if(arg && 
+              (arg.prices || arg.rating || arg.search || arg.sort || 
+              (arg.categoryIds &&  arg.categoryIds?.length > 0))
+            )
+          {
+            return [{type: 'ShopProduct', id: 'FILTER'}]
+          }
+          return [{type: 'ShopProduct', id: cursorId}]
         },
         transformResponse: (res: CustomerProductsResponse, meta, arg) => {
 
           if (res && res.data) {
+
             const lastItemIndex = res.data.length - 1;
-            if (lastItemIndex) {
+            const hasItems = res.data[lastItemIndex];
+            if (hasItems) {
               console.log('result' ,res);
               const { id } = res.data[lastItemIndex];
               console.log("cursor id", id)
@@ -101,7 +111,7 @@ export interface FilterListResponse {
 
             }
           }
-          
+          console.log('rejected')
           return {...res, cursorId: undefined}
 
         }

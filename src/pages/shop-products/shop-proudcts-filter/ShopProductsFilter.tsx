@@ -28,7 +28,11 @@ const sortOptions = [
   },
 ];
 
-const ShopProductsFilter = () => {
+interface Props {
+  onFilterChange: () => void;
+}
+
+const ShopProductsFilter = ({ onFilterChange }: Props) => {
   const {
     perPageFilter,
     togglePerPageFilterItem,
@@ -57,6 +61,7 @@ const ShopProductsFilter = () => {
                 id="page-filter"
                 value={perPageFilter}
                 onChange={(e) => {
+                  onFilterChange();
                   togglePerPageFilterItem(e.target.value);
                 }}
               />
@@ -65,7 +70,10 @@ const ShopProductsFilter = () => {
               <StyledFilterLabel htmlFor="sort">Sort By:</StyledFilterLabel>
               <StyledSortSelect
                 value={sortFilter}
-                onChange={(e) => toggleSortFilterItem(e.target.value)}
+                onChange={(e) => {
+                  onFilterChange();
+                  toggleSortFilterItem(e.target.value);
+                }}
               >
                 {sortOptions.map((item) => (
                   <option value={item.value} key={item.label}>

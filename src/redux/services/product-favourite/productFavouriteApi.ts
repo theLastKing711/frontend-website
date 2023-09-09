@@ -14,7 +14,12 @@ export const productFavouriteApi = apiSlice.injectEndpoints({
             invalidatesTags: (result, error, arg) => {
                 const invalidatedCursor =  arg && arg.cursorId ? arg.cursorId : undefined 
                 console.log("args", invalidatedCursor);
-                return ['Home', 'WishList', {type: 'ShopProduct', id: invalidatedCursor}]
+                return [
+                    'Home', 
+                    'WishList',
+                    {type: 'ShopProduct', id: invalidatedCursor},
+                    {type: 'ShopProduct', id: 'FILTER'}
+                ]
             }
         }),
         wishList: build.query<WishListResponseDto[], void>({
