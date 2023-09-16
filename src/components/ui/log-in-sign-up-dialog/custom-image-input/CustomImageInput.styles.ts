@@ -13,7 +13,8 @@ export const StyledImageInput = styled('input')<InputProps & { isLoading: boolea
     width: '120px',
     boxSizing: 'border-box',
     opacity: isLoading ? 0 : 1,
-    transition: 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
+    zIndex: -1,
+    // transition: 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
 }));
 
 export const StyledButtonOverlay = styled(Button)(({ theme }) => ({
