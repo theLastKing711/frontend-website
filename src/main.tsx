@@ -21,6 +21,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.ts";
 import Wishlist from "./pages/wishlist/Wishlist.tsx";
 import ProtectedRoute from "./pages/auth/protected-route/ProtectedRoute.tsx";
+import User from "./pages/user/User.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,6 +39,7 @@ const router = createBrowserRouter(
           </ProtectedRoute>
         }
       />
+      <Route path="user/:id" element={<User />} />
       <Route path="login" element={<Login />} />
       <Route path="sign-up" element={<SignUp />} />
     </Route>

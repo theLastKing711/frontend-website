@@ -6,6 +6,7 @@ import savedCartItemsReducer from "./features/saved-cart-items/savedCartItems"
 import { invoiceApi } from "./services/invoice/invoiceApi";
 import { authApi } from "./services/auth/authApi";
 import { productFavouriteApi } from "./services/product-favourite/productFavouriteApi";
+import { userApi } from "./services/user/userApi";
 
 export const rootReducer = combineReducers({
     [homeApi.reducerPath]: homeApi.reducer,
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
     [invoiceApi.reducerPath]: invoiceApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [productFavouriteApi.reducerPath]: productFavouriteApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
     savedCartItems: savedCartItemsReducer,
     user: userSliceReducer
   });

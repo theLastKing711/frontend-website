@@ -1,4 +1,4 @@
-import { Input, InputBase, NativeSelect, Select, styled } from "@mui/material";
+import { InputBase, styled } from "@mui/material";
 
 export const StyledSection = styled('div')(({ theme }) => ({
     margin: '2.5rem 0',
