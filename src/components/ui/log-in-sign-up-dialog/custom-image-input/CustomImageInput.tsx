@@ -3,9 +3,10 @@ import {
   ImageInputContainer,
   StyledButtonOverlay,
   StyledImageInput,
+  StyledImageInputOverlay,
 } from "./CustomImageInput.styles";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import { ChangeEventHandler, useRef } from "react";
+import { ChangeEventHandler, useRef, useState } from "react";
 import TailSpin from "react-loading-icons/dist/esm/components/tail-spin";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -42,20 +43,17 @@ const CustomImageInput = ({
       size={20}
       initial={{
         opacity: 0,
-        transform: "scale(0)",
       }}
       animate={{
         opacity: 1,
-        transform: "scale(1)",
       }}
       transition={{
-        duration: 0.25,
+        // duration: 0.25,
         delay: 0.25,
       }}
     />
   ) : (
     <FramerFileUploadIcon
-      key={2}
       initial={{
         opacity: 1,
       }}
@@ -67,34 +65,37 @@ const CustomImageInput = ({
       }}
       transition={{
         duration: 0.25,
+        // delay: 0.15,
       }}
     />
   );
-  console.log("is loading", isLoading);
 
   return (
-    <ImageInputContainer {...rootProps}>
-      <StyledImageInput
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleChange}
-        disabled={isLoading}
-        isLoading={isLoading}
-      />
-      <StyledButtonOverlay
-        ref={uploadButtonRef}
-        role="presentation"
-        tabIndex={-1}
-        variant="contained"
-        startIcon={<AnimatePresence>{buttonIcon}</AnimatePresence>}
-        onClick={handleButtonClick}
-        disabled={isLoading}
-        {...buttonProps}
-      >
-        Upload
-      </StyledButtonOverlay>
-    </ImageInputContainer>
+    <>
+      <ImageInputContainer {...rootProps}>
+        <StyledImageInput
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleChange}
+          disabled={isLoading}
+          isLoading={isLoading}
+        />
+        <StyledImageInputOverlay />
+        <StyledButtonOverlay
+          ref={uploadButtonRef}
+          role="presentation"
+          tabIndex={-1}
+          variant="contained"
+          startIcon={<AnimatePresence>{buttonIcon})</AnimatePresence>}
+          onClick={handleButtonClick}
+          disabled={isLoading}
+          {...buttonProps}
+        >
+          Upload
+        </StyledButtonOverlay>
+      </ImageInputContainer>
+    </>
   );
 };
 

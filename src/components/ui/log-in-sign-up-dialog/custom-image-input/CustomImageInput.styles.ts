@@ -10,11 +10,20 @@ export const ImageInputContainer = styled('div')(({ theme }) => ({
 
 export const StyledImageInput = styled('input')<InputProps & { isLoading: boolean}>(({ isLoading, theme }) => ({
     padding: '0.5rem',
-    width: '120px',
+    width: '130px',
     boxSizing: 'border-box',
     opacity: isLoading ? 0 : 1,
-    zIndex: -1,
-    // transition: 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
+}));
+
+export const StyledImageInputOverlay = styled('div')(({ theme }) => ({
+    position: 'absolute',
+    backgroundColor: 'white',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    // pointerEvents: 'none',
+    // opacity: 0.5,
 }));
 
 export const StyledButtonOverlay = styled(Button)(({ theme }) => ({
@@ -26,3 +35,4 @@ export const StyledButtonOverlay = styled(Button)(({ theme }) => ({
     // pointerEvents: 'none',
     // opacity: 0.5,
 }));
+

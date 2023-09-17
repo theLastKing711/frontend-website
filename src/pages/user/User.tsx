@@ -47,15 +47,6 @@ const User = () => {
     <StyledMain>
       <Container>
         <StyledPaper>
-          <button
-            disabled={updateImageData.isLoading}
-            style={{
-              background: updateImageData.isLoading ? "red" : "green",
-            }}
-            // onClick={() => setTest(true)}
-          >
-            asdl
-          </button>
           <StyledHeader>Edit your Profile</StyledHeader>
           {data && (
             <StyeldMainContent>
