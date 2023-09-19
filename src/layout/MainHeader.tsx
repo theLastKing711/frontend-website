@@ -4,12 +4,8 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useSelector } from "react-redux";
 
-import { tokenSelector } from "../redux/features/auth/auth";
+import { authUserSelector, tokenSelector } from "../redux/features/auth/auth";
 import { useCartItems } from "../redux/features/saved-cart-items/hooks/useCartItems";
-
-const baseStyled: BoxProps = {
-  fontSize: "1rem",
-};
 
 const StyledMainHeaderItem = styled(Link)(({ theme }) => ({
   color: "#F1F1F1",
@@ -19,9 +15,18 @@ const StyledMainHeaderItem = styled(Link)(({ theme }) => ({
   cursor: "pointer",
 }));
 
+const loginRoute = "/login";
+
 const MainHeader = () => {
-  const isUserLogged = useSelector(tokenSelector);
   const { itemsCount } = useCartItems();
+
+  const loggedUser = useSelector(authUserSelector);
+
+  console.log(loggedUser?.sub.toString());
+
+  console.log("loggedUser", loggedUser?.sub);
+
+  const userOrloginRoute = loggedUser ? `/user/${loggedUser.sub}` : loginRoute;
 
   return (
     <Box
@@ -46,12 +51,14 @@ const MainHeader = () => {
             <Box component="ul" display="flex" alignItems="center">
               <Box component="li">
                 <StyledMainHeaderItem
-                  href={isUserLogged ? "/test" : "/login"}
+                  href={userOrloginRoute}
                   display="flex"
                   mr={3}
                   gap="0.3rem"
                 >
-                  <Box>{isUserLogged ? "Welcome, vamer" : "Login"}</Box>
+                  <Box>
+                    {loggedUser ? `Welcome, ${loggedUser.username}` : "Login"}
+                  </Box>
                   <PersonIcon />
                 </StyledMainHeaderItem>
               </Box>

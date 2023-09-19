@@ -14,15 +14,20 @@ import {
 } from "../../redux/services/shop-products/shopProductApi";
 import { useFilterProducts } from "./hooks/useFilterProducts";
 import { useCartItems } from "../../redux/features/saved-cart-items/hooks/useCartItems";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleItem } from "../../redux/features/saved-cart-items/savedCartItems";
 import useAuthControlDialog from "../../hooks/useAuthControlDialog";
 import { useToggleFavouriteProductMutation } from "../../redux/services/product-favourite/productFavouriteApi";
 import LogInSignUpDialog from "../../components/ui/log-in-sign-up-dialog/LogInSignUpDialog";
 import { useEffect, useState } from "react";
 import TestComponent from "./TestComponent";
+import { authUserSelector } from "../../redux/features/auth/auth";
 
 const ShopProducts = () => {
+  const xs = useSelector(authUserSelector);
+
+  console.log("sex", xs);
+
   const shouldShowSideBar = useMediaQuery("(min-width:1000px)");
   const [cursorId, setCursorId] = useState<undefined | number>();
   const dispatch = useDispatch();

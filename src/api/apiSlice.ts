@@ -11,13 +11,12 @@ export const baseQuery = fetchBaseQuery({
       
         const token = (api.getState() as RootState).user.token;
 
-        
-        if(token && token.accessToken) {
+        if(token?.accessToken) {
 
           headers.set("authorization", `Bearer ${token.accessToken}`);
         }
         return headers;
-    }
+    },
 });
 
 // const baseQueryWithReauth = async (args, api, extraOptions) => {

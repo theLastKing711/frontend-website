@@ -14,14 +14,18 @@ const schema = yup
   })
   .required();
 
-type UserData = Pick<UpdateAppUserDto, "userName">;
+type oldUserDataProps = Pick<UpdateAppUserDto, "userName">;
+export type UpdateUserFormProps = Pick<
+  UpdateAppUserDto,
+  "userName" | "password"
+>;
 
 interface Props {
-  oldUserData: UserData;
-  handleSubmit: (newUser: UserData) => void;
+  oldUserData: oldUserDataProps;
+  handleFormSubmit: (newUser: UpdateUserFormProps) => void;
 }
 
-const EditForm = ({ oldUserData: { userName } }: Props) => {
+const EditForm = ({ oldUserData: { userName }, handleFormSubmit }: Props) => {
   const navigate = useNavigate();
   const [signUp, signUpData] = useSignUpMutation();
   const {
@@ -30,20 +34,18 @@ const EditForm = ({ oldUserData: { userName } }: Props) => {
     handleSubmit,
     watch,
     formState: { errors },
+    resetField,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  //   const onSubmit = handleSubmit((data) => {});
-
-  const handleImageChange:
-    | React.ChangeEventHandler<HTMLInputElement>
-    | undefined = (e) => {
-    console.log(e.target.files);
-  };
+  const onSubmit = handleSubmit((data) => {
+    handleFormSubmit(data);
+    resetField("password");
+  });
 
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <CustomFormInput
         name="userName"
         control={control}

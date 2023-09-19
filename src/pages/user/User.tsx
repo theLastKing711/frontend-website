@@ -10,26 +10,17 @@ import {
 import {
   useGetUserQuery,
   useUpdateUserImageMutation,
+  useUpdateUserMutation,
 } from "../../redux/services/user/userApi";
 import { useParams } from "react-router-dom";
-import * as yup from "yup";
-import EditForm from "./edit-form/EditForm";
+import EditForm, { UpdateUserFormProps } from "./edit-form/EditForm";
 import EditImageForm from "./edit-image-form/EditImageForm";
-import { useState } from "react";
-
-const schema = yup
-  .object({
-    userName: yup.string().required().min(2).max(20),
-    password: yup.string().required().min(5).max(30),
-  })
-  .required();
 
 const User = () => {
   const { id = "25" } = useParams();
   const { data, isLoading, isFetching } = useGetUserQuery(id);
   const [updateImage, updateImageData] = useUpdateUserImageMutation();
-
-  console.log("datas", data);
+  const [updateUser, updateUserData] = useUpdateUserMutation();
 
   const handleImageChange = (file: File) => {
     console.log("file", file);
@@ -39,9 +30,12 @@ const User = () => {
     });
   };
 
-  const [test, setTest] = useState(false);
-
-  console.log("is loading 1", isLoading);
+  const handleUpdateUserSubmit = (updatedUser: UpdateUserFormProps) => {
+    void updateUser({
+      ...updatedUser,
+      id: +id,
+    });
+  };
 
   return (
     <StyledMain>
@@ -60,7 +54,7 @@ const User = () => {
               <StyledUserDataContainer>
                 <EditForm
                   oldUserData={{ userName: data.userName }}
-                  handleSubmit={console.log}
+                  handleFormSubmit={handleUpdateUserSubmit}
                 />
               </StyledUserDataContainer>
             </StyeldMainContent>

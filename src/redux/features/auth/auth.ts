@@ -1,25 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { Action, Middleware, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from 'src/redux/store';
+import jwt_decode from "jwt-decode";
 
   export interface User {
-    user: User | null;
+    user: AccessToken | null;
     token: Token | null;
   }
   
   export interface Token {
     accessToken: string;
+    refreshToken: string;
   }
 
+  interface AccessToken
+  { sub: number, username: string, iat: number, exp: number }
+
   const getUserFromStorage = () => {
-    const user = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
     
-
-    if(user)
+    if(token)
     {
-      const parsedUser = JSON.parse(user) as User;
+      const parsedToken = JSON.parse(token) as Token;
+      console.log('parsed token', parsedToken);
+      const decodedHeader = jwt_decode(parsedToken.accessToken);
 
-      return parsedUser;
+      console.log('token', decodedHeader);
+
+      return decodedHeader as AccessToken;
     }
 
     return null;
@@ -41,11 +49,19 @@ import { RootState } from 'src/redux/store';
      
   }
 
-  const setUserInStorage = (user: User) => {
-    const jsonParsedUser = JSON.stringify(user);
-
-    localStorage.setItem('user', jsonParsedUser);
+  const getRefreshTokenFromStorage = () => {
+    const token = localStorage.getItem('token');
     
+
+    if(token)
+    {
+      const parsedToken = JSON.parse(token) as Token;
+
+      return parsedToken.refreshToken;
+    }
+
+    return null;
+     
   }
 
   const setTokenInStorage = (token: Token) => {
@@ -65,13 +81,6 @@ export const userSlice = createSlice({
   
   initialState,
   reducers: {
-    saveUser: (state, action: PayloadAction<User>) => {
-
-        console.log("action payload", action.payload);
-
-        state.user = action.payload;
-        
-    },
     saveToken: (state, action: PayloadAction<Token>) => {
 
       state.token = action.payload;
@@ -88,21 +97,10 @@ export const authStorageMiddleWare: Middleware<(action: Action<'addItem'>) => nu
   ( { dispatch, getState}) => 
   (next) => 
   (action: 
-    Action<"user/saveUser" | "user/saveToken">) => {
+    Action<"user/saveToken">) => {
 
   const result = next(action);
   
-  if(action.type === "user/saveUser")
-  {
-    const savedUser = getState().user.user?.user;
-
-    console.log("saved user", savedUser);
-
-    if(savedUser)
-    {
-      setUserInStorage(savedUser);
-    }
-  }
   
   if(action.type === "user/saveToken")
   {
@@ -122,8 +120,7 @@ export const authUserSelector = (state: RootState) => state.user.user;
 
 export const tokenSelector = (state: RootState) => state.user.token;
 
-
 // Action creators are generated for each case reducer function
-export const { saveUser, saveToken } = userSlice.actions
+export const { saveToken } = userSlice.actions
 
 export default userSlice.reducer

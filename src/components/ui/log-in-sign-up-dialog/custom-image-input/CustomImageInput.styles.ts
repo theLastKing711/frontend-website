@@ -22,8 +22,7 @@ export const StyledImageInputOverlay = styled('div')(({ theme }) => ({
     left: 0,
     width: '100%',
     height: '100%',
-    // pointerEvents: 'none',
-    // opacity: 0.5,
+ 
 }));
 
 export const StyledButtonOverlay = styled(Button)(({ theme }) => ({
@@ -32,7 +31,6 @@ export const StyledButtonOverlay = styled(Button)(({ theme }) => ({
     left: 0,
     width: '100%',
     height: '100%',
-    // pointerEvents: 'none',
-    // opacity: 0.5,
+
 }));
 

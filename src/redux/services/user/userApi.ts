@@ -1,5 +1,6 @@
-import { FetchArgs } from '@reduxjs/toolkit/dist/query';
+import { FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import { apiSlice } from '../../../api/apiSlice';
+import { Token, saveToken } from '../../../redux/features/auth/auth';
 
   interface AppUserDto {
     id: number;
@@ -13,17 +14,18 @@ import { apiSlice } from '../../../api/apiSlice';
 
   export interface UpdateAppUserDto {
       id: number;
-      // createdAt: Date;
       userName: string;
       password: string;
-      file: File;
   }
 
   const userUrl = 'customer-user';
 
   const getUserRoute = (id: string) => `${userUrl}/${id}`
+  
 
-  const buildUserFormData = (user: UpdateAppUserDto): string | FetchArgs => {
+  const getUpdateImageUrl = (id: string) => `${userUrl}/${id}` + '/updateImage';
+
+  const buildUpdateUserFormData = (user: UpdateAppUserDto): string | FetchArgs => {
 
     const StringId = user.id.toString();
     
@@ -38,7 +40,7 @@ import { apiSlice } from '../../../api/apiSlice';
     return {
         url: getUserRoute(StringId),
         body: formData,
-        method: 'POST',
+        method: 'PATCH',
     }
 
   }
@@ -51,7 +53,7 @@ import { apiSlice } from '../../../api/apiSlice';
     formData.append('file', user.file);
 
         return {
-        url: getUserRoute(StringId),
+        url: getUpdateImageUrl(StringId),
         body: formData,
         method: 'PATCH',
     }
@@ -64,8 +66,30 @@ import { apiSlice } from '../../../api/apiSlice';
         query: getUserRoute,
         providesTags: ['User'],
       }),
-      updateUser: build.mutation<number, UpdateAppUserDto>({
-        query: buildUserFormData,
+      updateUser: build.mutation<Token, UpdateAppUserDto>({
+        async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
+          
+          const updatedUser = await fetchWithBQ(buildUpdateUserFormData(_arg));
+
+          if (updatedUser.error) {
+            return { error: updatedUser.error }
+          }
+          
+          const result = await fetchWithBQ('auth/getAccessToken');
+
+          console.log('result', result);
+          
+          if (result.error)
+            return { error: result.error }
+
+          const accessToken = result.data as Token;
+          
+          _queryApi.dispatch(saveToken(accessToken))
+          
+          return result.data
+            ? { data: accessToken}
+            : { error: result.error as unknown as FetchBaseQueryError}
+        },
         invalidatesTags: ['User'],
       }),
       updateUserImage: build.mutation<number, AppUserImageDto>({

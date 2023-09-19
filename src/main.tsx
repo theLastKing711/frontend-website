@@ -39,7 +39,14 @@ const router = createBrowserRouter(
           </ProtectedRoute>
         }
       />
-      <Route path="user/:id" element={<User />} />
+      <Route
+        path="user/:id"
+        element={
+          <ProtectedRoute>
+            <User />
+          </ProtectedRoute>
+        }
+      />
       <Route path="login" element={<Login />} />
       <Route path="sign-up" element={<SignUp />} />
     </Route>
