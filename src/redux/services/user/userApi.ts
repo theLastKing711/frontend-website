@@ -21,7 +21,6 @@ import { Token, saveToken } from '../../../redux/features/auth/auth';
   const userUrl = 'customer-user';
 
   const getUserRoute = (id: string) => `${userUrl}/${id}`
-  
 
   const getUpdateImageUrl = (id: string) => `${userUrl}/${id}` + '/updateImage';
 
