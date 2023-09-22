@@ -1,9 +1,18 @@
-import { Box, Button, Container, styled, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Link,
+  styled,
+  useMediaQuery,
+} from "@mui/material";
 import LightImage from "../../../assets/light.png";
 import PinkSofaImage from "../../../assets/pink-chair.png";
 import PinkSofaDiscountImage from "../../../assets/pink-sofa-discount.svg";
 import SofaOuterCircleImage from "../../../assets/Ellipse 60.png";
 import SofaInnerCircleImage from "../../../assets/Ellipse 61.png";
+import { useNavigate } from "react-router-dom";
+import { SHOP_PRODUCTS_ROUTE } from "../../../main";
 
 const StyledLightImage = styled("img")(({ theme }) => ({
   position: "absolute",
@@ -62,6 +71,9 @@ const StyledPinkSofaDiscountImage = styled("div")(({ theme }) => ({
   fontSize: "2.1875rem",
   fontStyle: "normal",
   fontWeight: 700,
+  "@media screen and (max-width: 800px)": {
+    display: "none",
+  },
 }));
 
 const StyledDiscountText = styled("p")(({ theme }) => ({
@@ -86,7 +98,9 @@ const StyledPinkSofaOuterCircleImage = styled("img")(({ theme }) => ({
   //   right: -24,
 }));
 
-const StyledShopNowButton = styled(Button)(({ theme }) => ({
+const StyledLink = styled(Link)(({ theme }) => ({
+  borderRadius: "6px",
+  textDecoration: "none",
   backgroundColor: theme.palette.primary.main,
   color: "#FFF",
   fontFamily: "Josefin Sans",
@@ -124,7 +138,7 @@ const Hero = () => {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Magna in
               est adipiscing in phasellus non in justo.
             </StyledParagraph>
-            <StyledShopNowButton>Shop Now</StyledShopNowButton>
+            <StyledLink href={SHOP_PRODUCTS_ROUTE}>Shop Now</StyledLink>
           </Box>
           <Box sx={{ flex: 1, position: "relative" }}>
             <StyledPinkSofaInnerCircleImage src={SofaInnerCircleImage} />

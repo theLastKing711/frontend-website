@@ -1,6 +1,6 @@
-import { Box, Container, Input, Link, styled } from "@mui/material";
-import React from "react";
+import { Box, Container, Link, styled } from "@mui/material";
 import GlobalSearchInput from "./GlobalSearchInput";
+import { HOME_ROUTE, SHOP_PRODUCTS_ROUTE } from "../main";
 
 const StyledSiteLink = styled(Link)(({ theme }) => ({
   color: "#0D0E43",
@@ -20,6 +20,10 @@ const StyledPagesLink = styled(Link)(({ theme }) => ({
   fontWeight: 400,
   lineHeight: "normal",
   textDecoration: "none",
+  "&:hover": {
+    color: "gray",
+    transition: "color 4s",
+  },
 }));
 
 const SubHeader = () => {
@@ -41,17 +45,16 @@ const SubHeader = () => {
           <Box component="nav" flex={1}>
             <Box component="ul" display="flex" alignItems="center" gap={3.5}>
               <Box component="li">
-                <StyledPagesLink>Home</StyledPagesLink>
+                <StyledPagesLink href={HOME_ROUTE}>Home</StyledPagesLink>
               </Box>
               <Box component="li">
-                <StyledPagesLink>Products</StyledPagesLink>
-              </Box>
-              <Box component="li">
-                <StyledPagesLink>Shop</StyledPagesLink>
+                <StyledPagesLink href={SHOP_PRODUCTS_ROUTE}>
+                  Shop
+                </StyledPagesLink>
               </Box>
             </Box>
           </Box>
-          <GlobalSearchInput />
+          {/* <GlobalSearchInput /> */}
         </Box>
       </Container>
     </Box>

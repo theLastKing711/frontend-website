@@ -23,16 +23,22 @@ import Wishlist from "./pages/wishlist/Wishlist.tsx";
 import ProtectedRoute from "./pages/auth/protected-route/ProtectedRoute.tsx";
 import User from "./pages/user/User.tsx";
 
+export const SHOP_PRODUCTS_ROUTE = "/shop-products";
+export const HOME_ROUTE = "";
+export const LOGIN_ROUTE = "/login";
+export const USER_ROUTE = "/user";
+export const WISHlIST_ROUTE = "/wishlist";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index element={<Home />} />
-      <Route path="shop-products" element={<ShopProducts />} />
+      <Route path={SHOP_PRODUCTS_ROUTE} element={<ShopProducts />} />
       <Route path="product/:id" element={<ProductDetails />} />
       <Route path="shopping-cart" element={<ShoppingCart />} />
       <Route path="order-completed" element={<OrderCompleted />} />
       <Route
-        path="wishlist"
+        path={WISHlIST_ROUTE}
         element={
           <ProtectedRoute>
             <Wishlist />

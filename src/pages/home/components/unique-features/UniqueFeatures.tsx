@@ -1,4 +1,11 @@
-import { Box, Button, Container, ListItemProps, styled } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  ListItemProps,
+  styled,
+  useMediaQuery,
+} from "@mui/material";
 import UniqueSofaImage from "../../../../assets/unique-sofa.png";
 import UniqueSofaImageBackground from "../../../../assets/unique-sofa-background.png";
 
@@ -136,14 +143,19 @@ const StyledProductPrice = styled("h3")(({ theme }) => ({
 }));
 
 const UniqueFeatures = () => {
+  const shouldShowBlueSofa = useMediaQuery("(min-width:800px)");
+
   return (
     <StyledSection>
       <Container>
         <StyledContent>
-          <StyledImageContainer sx={{ flex: 1 }}>
-            <StyledImageBackground src={UniqueSofaImageBackground} />
-            <StyledImage src={UniqueSofaImage}></StyledImage>
-          </StyledImageContainer>
+          {shouldShowBlueSofa && (
+            <StyledImageContainer sx={{ flex: 1 }}>
+              <StyledImageBackground src={UniqueSofaImageBackground} />
+              <StyledImage src={UniqueSofaImage}></StyledImage>
+            </StyledImageContainer>
+          )}
+
           <Box sx={{ flex: 1 }}>
             <StyledHeading>
               Unique Features Of leatest & Trending Poducts
