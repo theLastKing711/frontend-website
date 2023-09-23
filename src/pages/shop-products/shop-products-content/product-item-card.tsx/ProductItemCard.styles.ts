@@ -11,22 +11,28 @@ export const StyledContent = styled('div')(({ theme}) => ({
     display: 'flex',
     alignItems: 'center',
     gap: '1.81rem',
+    '@media screen and (max-width: 800px)': {
+        flexDirection: 'column',
+    }
 }));
 
 
 export const StyledProductImage = styled('img')( ({ theme } ) => ({
     flex: '0 0 15rem',
     maxWidth: '15rem',
-    height: '12.3rem',
+    height: '10rem',
+    objectFit: 'contain',
+    '@media screen and (max-width: 800px)': {
+        maxWidth: '100%',
+        width: 'auto',
+        height: '1rem',
+    }
 }));
 
 
 export const StyledProductDetails = styled('div')( ({ theme } ) => ({
     flex: 1,
 }));
-
-
-
 
 export const StyledProductName = styled('h3')( ({ theme } ) => ({
     color: "#111C85",
@@ -37,7 +43,6 @@ export const StyledProductName = styled('h3')( ({ theme } ) => ({
     lineHeight: "normal",
     marginBottom: '0.81rem',
 }));
-
 
 export const StyledProductPricing = styled('div')( ({ theme } ) => ({
    display: 'flex',

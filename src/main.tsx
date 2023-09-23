@@ -24,7 +24,7 @@ import ProtectedRoute from "./pages/auth/protected-route/ProtectedRoute.tsx";
 import User from "./pages/user/User.tsx";
 
 export const SHOP_PRODUCTS_ROUTE = "/shop-products";
-export const HOME_ROUTE = "";
+export const HOME_ROUTE = "/";
 export const LOGIN_ROUTE = "/login";
 export const USER_ROUTE = "/user";
 export const WISHlIST_ROUTE = "/wishlist";

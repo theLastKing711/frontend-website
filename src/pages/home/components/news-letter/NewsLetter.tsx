@@ -1,5 +1,6 @@
 import { Button, Container, styled } from "@mui/material";
 import NewsLetterImage from "../../../../assets/news-letter-image.png";
+import { SHOP_PRODUCTS_ROUTE } from "../../../../main";
 
 const StyledSection = styled("section")(({ theme }) => ({
   backgroundImage: `url(${NewsLetterImage})`,
@@ -39,7 +40,9 @@ const NewsLetter = () => {
         <StyledHeading>
           Get Leatest Update By Subscribe 0ur Newslater
         </StyledHeading>
-        <StyledShopNowButton>Shop Now</StyledShopNowButton>
+        <StyledShopNowButton href={SHOP_PRODUCTS_ROUTE}>
+          Shop Now
+        </StyledShopNowButton>
       </Container>
     </StyledSection>
   );

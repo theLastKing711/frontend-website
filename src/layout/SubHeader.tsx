@@ -10,6 +10,7 @@ const StyledSiteLink = styled(Link)(({ theme }) => ({
   fontWeight: 700,
   lineHeight: "normal",
   textDecoration: "none",
+  cursor: "pointer",
 }));
 
 const StyledPagesLink = styled(Link)(({ theme }) => ({
@@ -22,7 +23,7 @@ const StyledPagesLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
   "&:hover": {
     color: "gray",
-    transition: "color 4s",
+    transition: "color 0.2s",
   },
 }));
 
@@ -41,7 +42,9 @@ const SubHeader = () => {
             height: "4.25rem",
           }}
         >
-          <StyledSiteLink mr={5}>Hekto</StyledSiteLink>
+          <StyledSiteLink href={HOME_ROUTE} mr={5}>
+            Hekto
+          </StyledSiteLink>
           <Box component="nav" flex={1}>
             <Box component="ul" display="flex" alignItems="center" gap={3.5}>
               <Box component="li">

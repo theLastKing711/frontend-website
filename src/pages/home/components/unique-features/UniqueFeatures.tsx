@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import UniqueSofaImage from "../../../../assets/unique-sofa.png";
 import UniqueSofaImageBackground from "../../../../assets/unique-sofa-background.png";
+import { SHOP_PRODUCTS_ROUTE } from "../../../../main";
 
 const featuresList = [
   {
@@ -171,7 +172,9 @@ const UniqueFeatures = () => {
               ))}
             </StyledFeaturesList>
             <StyledPurchaseFooter>
-              <StyledAddToCartButton>Add To Cart</StyledAddToCartButton>
+              <StyledAddToCartButton href={SHOP_PRODUCTS_ROUTE}>
+                Shop Now
+              </StyledAddToCartButton>
               <StyledPricing>
                 <StyledProductName>B&B Italian Sofa</StyledProductName>
                 <StyledProductPrice>$32.00</StyledProductPrice>
